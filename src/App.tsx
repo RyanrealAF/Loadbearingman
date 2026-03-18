@@ -22,7 +22,7 @@ import {
 
 // --- Types ---
 
-type SceneId = 'intro' | 'farmers-market' | 'taqueria' | 'night-roaster' | 'san-francisco' | 'conclusion';
+type SceneId = 'prologue' | 'orange-county' | 'santa-barbara' | 'pismo-taqueria' | 'big-sur' | 'santa-cruz' | 'san-francisco' | 'epilogue';
 
 interface DeepDive {
   id: string;
@@ -51,19 +51,13 @@ interface StoryBeat {
 }
 
 const STORY_BEATS: Record<SceneId, StoryBeat> = {
-  intro: {
-    title: "Chapter One: What the Poster Doesn't Show",
-    location: "California Coast, 11 Days Out",
-    text: "The California coast they sell in airports is technically real. Turquoise water. The pier stretching polite into the horizon. Now Marcus was riding through the actual version. Same coastline. Different truth. The bike under him was a twenty-year-old Trek held together with a zip tie and stubbornness. The pack weighed thirty-one pounds. When life gets chaotic, weight becomes useful information.",
-    marginalia: "The city maintains a dual-layered reality. The primary layer is a curated performance; the secondary layer is the functional infrastructure of survival.",
-    nextScene: 'farmers-market',
+  prologue: {
+    title: "Prologue: The Weight of Departure",
+    location: "San Diego - Mile 0",
+    text: "The departure was not a grand event. It was a series of small, mechanical decisions. Marcus tightened the straps on the panniers, feeling the familiar resistance of thirty-one pounds of essential existence. The bike, a twenty-year-old Trek with a frame that hummed with the ghosts of previous owners, leaned against a salt-crusted railing. Behind him, the city was waking up in a haze of expensive coffee and morning news. Ahead, the road stretched north, a thin ribbon of asphalt separating the Pacific from the performance of civilization. He wasn't leaving a life; he was simply moving the weight of it to a more honest location.",
+    marginalia: "Departure is the first act of witnessing. To move is to begin seeing the seams in the world's carefully constructed casing.",
+    nextScene: 'orange-county',
     deepDives: [
-      {
-        id: 'poster-vs-raw',
-        label: "The Poster vs. The Raw Cut",
-        icon: <Layers size={16} />,
-        content: "The 'Poster City' is a curated performance of civic virtue. It requires the systematic exclusion of 'unexpected variables' to maintain its teeth-clean teeth, tourist smile. The 'Raw Cut' is the unedited machine running in the dark, where the actual work of survival and maintenance happens."
-      },
       {
         id: '31lb-baseline',
         label: "The 31lb Baseline",
@@ -72,19 +66,28 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
       }
     ]
   },
-  'farmers-market': {
-    title: "Chapter Two: The Poster City",
-    location: "9:00 AM - Farmers Market",
-    text: "Heirloom tomatoes in colors that shouldn't exist. Lavender honey. A woman in two-hundred-dollar yoga gear noticed him noticing. Her body shifted half an inch. Tiny movement. Subtle. Smooth. Two steps sideways. The universal nonverbal for: unexpected variable detected, adjusting position, nothing to see here.",
-    marginalia: "Avoidance behavior is a primary mechanism for maintaining the 'Poster City' boundary. The outsider is processed as a data variable to be bypassed.",
-    nextScene: 'taqueria',
+  'orange-county': {
+    title: "Chapter One: The Poster Coast",
+    location: "Orange County - Mile 85",
+    text: "The California coast they sell in airports is technically real. Turquoise water. The pier stretching polite into the horizon. But as Marcus rode through the manicured suburbs of the south, he saw the actual version. Same coastline, different truth. The lawns were too green for the drought, the air smelled of chlorine and expensive sunscreen. Here, the 'Poster City' was at its most aggressive. It was a curated performance of civic virtue, a place where the unexpected was systematically filtered out. He was a smudge on a perfect lens, a variable that the architecture wasn't designed to solve.",
+    marginalia: "The 'Poster City' requires the systematic exclusion of 'unexpected variables' to maintain its tourist smile. The outsider is the unedited truth.",
+    nextScene: 'santa-barbara',
     deepDives: [
       {
-        id: 'farmers-market-voice',
-        label: "The Farmers Market Voice",
-        icon: <Activity size={16} />,
-        content: "A voice calibrated for ambient receipt. What you say is receivable as evidence of who you are. The performance of caring about provenance is a social currency used to purchase a sense of belonging at the edge of the market."
-      },
+        id: 'poster-vs-raw',
+        label: "The Poster vs. The Raw Cut",
+        icon: <Layers size={16} />,
+        content: "The 'Poster City' is a curated performance of civic virtue. It requires the systematic exclusion of 'unexpected variables' to maintain its teeth-clean teeth, tourist smile. The 'Raw Cut' is the unedited machine running in the dark."
+      }
+    ]
+  },
+  'santa-barbara': {
+    title: "Chapter Two: The Market of Exclusion",
+    location: "Santa Barbara - Mile 210",
+    text: "In the shadow of the mission, the farmers market was a theater of provenance. Heirloom tomatoes in colors that shouldn't exist. Lavender honey. Marcus stood at the edge, his salt-stained shirt a stark contrast to the two-hundred-dollar yoga gear swirling around him. A woman noticed him noticing. Her body shifted half an inch—a tiny, subtle movement. Two steps sideways. It was the universal nonverbal for: unexpected variable detected, adjusting position, nothing to see here. The market didn't just sell food; it sold the comfort of a shared, curated reality.",
+    marginalia: "Avoidance behavior is a primary mechanism for maintaining social boundaries. The outsider is processed as a data variable to be bypassed.",
+    nextScene: 'pismo-taqueria',
+    deepDives: [
       {
         id: 'avoidance-mechanics',
         label: "Avoidance Mechanics",
@@ -93,32 +96,47 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
       }
     ]
   },
-  'taqueria': {
-    title: "Chapter Three: What He Was For",
-    location: "7:00 AM - Next Town Taqueria",
-    text: "Two guys at the next table were deep in something. Not a casual disagreement. They paused when Marcus sat down. Then, the pressure change—the way a room shifts when two people who've been pulling against each other suddenly have a reason to stop. They oriented toward a third point. Him.",
+  'pismo-taqueria': {
+    title: "Chapter Three: The Structural Solution",
+    location: "Pismo Beach - Mile 290",
+    text: "The taqueria was loud, smelling of cilantro and hot oil. Two guys at the next table were deep in a disagreement that felt older than the building. They paused when Marcus sat down, the air between them thick with unresolved tension. Then, the pressure change—the way a room shifts when two people who've been pulling against each other suddenly have a reason to stop. They oriented toward a third point. Him. They didn't know him, but they knew what he was for. He was the solution to their friction, a shared target that allowed them to suspend their antagonism at zero cost.",
     marginalia: "The outsider functions as a low-cost consensus mechanism. Internal group tensions are resolved by orienting toward a shared external variable.",
-    nextScene: 'night-roaster',
+    nextScene: 'big-sur',
     deepDives: [
       {
         id: 'free-consensus',
         label: "Free Consensus",
         icon: <Layers size={16} />,
-        content: "The capacity to generate cross-factional alignment without requiring negotiation or compromise. Two people who cannot agree on anything find a shared target, allowing them to suspend their antagonism at zero cost to either party."
+        content: "The capacity to generate cross-factional alignment without requiring negotiation or compromise. Two people who cannot agree on anything find a shared target, allowing them to suspend their antagonism."
       },
       {
         id: 'ancodi-complex',
         label: "The ANCODI Complex",
         icon: <Activity size={16} />,
-        content: "The co-activation of Anxiety, Contempt, and Disgust. This affective configuration triggers intergroup aggression reliably, bypassing shared values and operating at the level of shared rejection."
+        content: "The co-activation of Anxiety, Contempt, and Disgust. This affective configuration triggers intergroup aggression reliably, bypassing shared values."
       }
     ]
   },
-  'night-roaster': {
-    title: "Chapter Four: The Education of the Outside",
-    location: "11:00 PM - Behind the Coffee Roaster",
-    text: "Brick holds the day's heat and releases it slow. Concrete steals it. A man in a bathrobe walking a dog stops. 'Good spot,' he says. 'Brick holds heat,' Marcus replies. The man nods. Both of those people are the city. The yoga gear and the bathrobe philosopher. Neither knows the other exists the way Marcus knows both of them.",
-    marginalia: "The outsider possesses a unified view of the city's disparate files. Knowledge is gained through direct negotiation with the physical architecture.",
+  'big-sur': {
+    title: "Chapter Four: The Silence of the Grade",
+    location: "Big Sur - Mile 360",
+    text: "The climb out of San Simeon is a lesson in humility. The road clings to the cliffs like a desperate thought. Marcus felt every ounce of the thirty-one pounds as he ground up the grades, the Pacific crashing hundreds of feet below. Here, the city was gone, replaced by the indifferent roar of the ocean and the silence of the redwoods. In the absence of people, the weight became purely physical. There was no social friction to bear, only the gravity of the earth. It was a different kind of load, one that didn't require a witness, only endurance.",
+    marginalia: "In the wild, weight is just physics. In the city, weight is a social statement. The transition between the two is where the truth lives.",
+    nextScene: 'santa-cruz',
+    deepDives: [
+      {
+        id: 'structural-labor',
+        label: "Structural Labor",
+        icon: <Layers size={16} />,
+        content: "The folk devil position constitutes a form of involuntary structural labor. The costs are borne by the individual, while the benefits of social cohesion accrue to the community."
+      }
+    ]
+  },
+  'santa-cruz': {
+    title: "Chapter Five: The Thermal Curriculum",
+    location: "Santa Cruz - Mile 440",
+    text: "Night in Santa Cruz is a technical negotiation. Marcus found a spot behind a coffee roaster where the brick walls still hummed with the day's heat. Brick is a battery; concrete is a thief. A man in a bathrobe walking a dog stopped. 'Good spot,' he said, his voice low. 'Brick holds heat,' Marcus replied. The man nodded, a brief moment of shared understanding between two versions of the city. The city teaches its curriculum through the physical properties of its materials, but only to those who are forced to listen. To the bathrobe philosopher, Marcus was a peer; to the yoga gear, he was a ghost.",
+    marginalia: "The city teaches its curriculum through the physical properties of its materials. Survival is a technical negotiation with the architecture.",
     nextScene: 'san-francisco',
     deepDives: [
       {
@@ -131,43 +149,37 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         id: 'intermission-show',
         label: "The Intermission Show",
         icon: <BookOpen size={16} />,
-        content: "Housed people treat night as an intermission. For the outsider, the intermission is the real show. The city at 2 a.m. is a completely different animal, running its actual operations without the casing on."
+        content: "Housed people treat night as an intermission. For the outsider, the intermission is the real show. The city at 2 a.m. is a completely different animal."
       }
     ]
   },
   'san-francisco': {
-    title: "Chapter Five: The City at Night Tells the Truth",
-    location: "Dusk - San Francisco Overpass",
-    text: "He reached San Francisco at dusk. Fog sliding in under the bridge. An older Vietnamese American man settled nearby. 'You just arrive?' he asked. 'Eleven days from San Diego,' Marcus said. The man smiled. 'Man who sees the whole system—he's inconvenient. So they make him the problem.'",
+    title: "Chapter Six: The System Witness",
+    location: "San Francisco - Mile 510",
+    text: "He reached the overpass at dusk, the fog sliding in under the Golden Gate like a cold secret. An older man, his face a map of long-forgotten journeys, settled nearby. 'You just arrive?' he asked. 'Eleven days from San Diego,' Marcus said. The man smiled, a slow, knowing thing. 'Man who sees the whole system—he's inconvenient. So they make him the problem.' Marcus looked out at the lights of the city, the machine running its actual operations without the casing on. He had seen the whole thing, from the manicured lawns to the thermal batteries. He was the witness they couldn't afford to believe.",
     marginalia: "The witness is perceived as a threat to the curated narrative. Making the witness 'the problem' is a defensive maneuver by the system.",
-    nextScene: 'conclusion',
+    nextScene: 'epilogue',
     deepDives: [
       {
         id: 'witness-problem',
         label: "The Witness Problem",
         icon: <Search size={16} />,
-        content: "You cannot unwitness something. The city's preferred version requires the outsider to be illegible—to be the problem—so that the unedited version of the city cannot circulate with any authority."
-      },
+        content: "You cannot unwitness something. The city's preferred version requires the outsider to be illegible—to be the problem—so that the unedited version of the city cannot circulate."
+      }
+    ]
+  },
+  'epilogue': {
+    title: "Epilogue: The Load-Bearing Man",
+    location: "The End of the Road",
+    text: "The journey was over, but the weight remained. Some communities carry their weight on bridges and buildings, engineered and calculated. Others carry it on people, unacknowledged and invisible. The load-bearing man didn't volunteer for the position, but the architecture of the city was built around him anyway. He was the anchor for their cohesion, the target for their tensions, the witness to their unedited truths. Marcus closed his eyes, the hum of the road still in his bones. The road was real. The weight was real. And for now, that was enough.",
+    marginalia: "The 'Load-Bearing Man' is a structural necessity in certain social architectures, bearing the weight of communal cohesion through exclusion.",
+    nextScene: 'prologue',
+    deepDives: [
       {
         id: 'inconvenient-truth',
         label: "Inconvenient Truths",
         icon: <BookOpen size={16} />,
-        content: "Testimony is harder to dismiss than argument. The city has given Marcus testimony by accident, just by running itself while he was present. This knowledge lives in him now and cannot be extracted."
-      }
-    ]
-  },
-  'conclusion': {
-    title: "The Load-Bearing Man",
-    location: "The End of the Road",
-    text: "Some communities carry their weight on bridges and buildings. Others carry it on people. The load-bearing man didn't volunteer for the position. The architecture was built around him anyway. Marcus closed his eyes. And slept.",
-    marginalia: "The 'Load-Bearing Man' is a structural necessity in certain social architectures, bearing the weight of communal cohesion through exclusion.",
-    nextScene: 'intro',
-    deepDives: [
-      {
-        id: 'structural-labor',
-        label: "Structural Labor",
-        icon: <Layers size={16} />,
-        content: "The folk devil position constitutes a form of involuntary structural labor. The costs are borne by the individual, while the benefits of social cohesion accrue to the community."
+        content: "Testimony is harder to dismiss than argument. The city has given Marcus testimony by accident, just by running itself while he was present."
       }
     ]
   }
@@ -245,12 +257,14 @@ const Marginalia = ({ text, progress }: { text: string, progress: number }) => (
 
 const PageInfo = ({ miles, load, scene }: { miles: number, load: number, scene: SceneId }) => {
   const pageMap: Record<SceneId, number> = {
-    intro: 1,
-    'farmers-market': 12,
-    taqueria: 28,
-    'night-roaster': 45,
-    'san-francisco': 62,
-    conclusion: 84
+    prologue: 1,
+    'orange-county': 12,
+    'santa-barbara': 28,
+    'pismo-taqueria': 45,
+    'big-sur': 62,
+    'santa-cruz': 84,
+    'san-francisco': 102,
+    epilogue: 120
   };
 
   return (
@@ -270,7 +284,7 @@ const PageInfo = ({ miles, load, scene }: { miles: number, load: number, scene: 
 
 export default function App() {
   const [state, setState] = useState<StoryState>({
-    scene: 'intro',
+    scene: 'prologue',
     load: 31,
     vibeShift: 0,
     distanceTraveled: 0,
@@ -281,9 +295,9 @@ export default function App() {
 
   const handleNext = () => {
     const nextId = currentBeat.nextScene;
-    if (nextId === 'intro') {
+    if (nextId === 'prologue') {
       setState({
-        scene: 'intro',
+        scene: 'prologue',
         load: 31,
         vibeShift: 0,
         distanceTraveled: 0,
@@ -292,12 +306,23 @@ export default function App() {
       return;
     }
 
+    const milesMap: Record<SceneId, number> = {
+      prologue: 0,
+      'orange-county': 85,
+      'santa-barbara': 210,
+      'pismo-taqueria': 290,
+      'big-sur': 360,
+      'santa-cruz': 440,
+      'san-francisco': 510,
+      epilogue: 510
+    };
+
     setState(prev => ({
       ...prev,
       scene: nextId,
-      load: prev.load + (Math.random() > 0.5 ? 1 : 0),
-      vibeShift: Math.min(100, prev.vibeShift + 15),
-      distanceTraveled: prev.distanceTraveled + 20,
+      load: prev.load + (Math.random() > 0.7 ? 1 : 0),
+      vibeShift: Math.min(100, prev.vibeShift + 12),
+      distanceTraveled: milesMap[nextId],
     }));
   };
 
