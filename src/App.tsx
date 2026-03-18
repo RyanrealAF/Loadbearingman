@@ -17,8 +17,12 @@ import {
   Search,
   Bookmark,
   FileText,
-  Quote
+  Quote,
+  Volume2,
+  VolumeX,
+  Loader2
 } from 'lucide-react';
+import { GoogleGenAI, Modality } from "@google/genai";
 
 // --- Types ---
 
@@ -291,9 +295,69 @@ export default function App() {
     activeDeepDive: null
   });
 
+  const [isNarrating, setIsNarrating] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+
   const currentBeat = STORY_BEATS[state.scene];
 
+  const handleNarration = async () => {
+    if (isNarrating) {
+      audioElement?.pause();
+      setIsNarrating(false);
+      return;
+    }
+
+    setIsLoadingAudio(true);
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-preview-tts",
+        contents: [{ parts: [{ text: `Read this chapter of the book "The Load-Bearing Man" with a calm, literary, and slightly melancholic tone: ${currentBeat.text}` }] }],
+        config: {
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: 'Kore' },
+            },
+          },
+        },
+      });
+
+      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (base64Audio) {
+        const binaryString = window.atob(base64Audio);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        const blob = new Blob([bytes], { type: 'audio/mpeg' });
+        const url = URL.createObjectURL(blob);
+        
+        if (audioUrl) URL.revokeObjectURL(audioUrl);
+        setAudioUrl(url);
+
+        const audio = new Audio(url);
+        setAudioElement(audio);
+        setIsLoadingAudio(false);
+        setIsNarrating(true);
+        audio.play();
+        audio.onended = () => setIsNarrating(false);
+      }
+    } catch (error) {
+      console.error("Narration failed:", error);
+      setIsLoadingAudio(false);
+      setIsNarrating(false);
+    }
+  };
+
   const handleNext = () => {
+    if (audioElement) {
+      audioElement.pause();
+      setIsNarrating(false);
+    }
     const nextId = currentBeat.nextScene;
     if (nextId === 'prologue') {
       setState({
@@ -362,9 +426,28 @@ export default function App() {
                 className="space-y-10"
               >
                 <div className="space-y-4">
-                  <span className="text-stone-400 text-xs italic tracking-widest uppercase">
-                    {currentBeat.location}
-                  </span>
+                  <div className="flex justify-between items-start">
+                    <span className="text-stone-400 text-xs italic tracking-widest uppercase">
+                      {currentBeat.location}
+                    </span>
+                    <button 
+                      onClick={handleNarration}
+                      disabled={isLoadingAudio}
+                      className="flex items-center gap-2 text-stone-400 hover:text-stone-900 transition-colors group disabled:opacity-50"
+                      title={isNarrating ? "Stop Narration" : "Listen to Chapter"}
+                    >
+                      <span className="text-[10px] italic uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        {isLoadingAudio ? "Preparing..." : isNarrating ? "Stop" : "Listen"}
+                      </span>
+                      {isLoadingAudio ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : isNarrating ? (
+                        <VolumeX size={16} className="text-stone-900" />
+                      ) : (
+                        <Volume2 size={16} />
+                      )}
+                    </button>
+                  </div>
                   <h1 className="text-4xl md:text-5xl font-serif text-stone-900 leading-tight italic">
                     {currentBeat.title}
                   </h1>
