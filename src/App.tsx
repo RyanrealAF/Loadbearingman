@@ -26,7 +26,7 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 // --- Types ---
 
-type SceneId = 'prologue' | 'orange-county' | 'santa-barbara' | 'pismo-taqueria' | 'big-sur' | 'santa-cruz' | 'san-francisco' | 'epilogue';
+type SceneId = 'prologue' | 'chapter-1' | 'chapter-2' | 'chapter-3' | 'chapter-4' | 'chapter-5' | 'chapter-6' | 'epilogue';
 
 interface DeepDive {
   id: string;
@@ -56,11 +56,11 @@ interface StoryBeat {
 
 const STORY_BEATS: Record<SceneId, StoryBeat> = {
   prologue: {
-    title: "Prologue: The Weight of Departure",
-    location: "San Diego - Mile 0",
-    text: "The departure was not a grand event. It was a series of small, mechanical decisions. Marcus tightened the straps on the panniers, feeling the familiar resistance of thirty-one pounds of essential existence. The bike, a twenty-year-old Trek with a frame that hummed with the ghosts of previous owners, leaned against a salt-crusted railing. Behind him, the city was waking up in a haze of expensive coffee and morning news. Ahead, the road stretched north, a thin ribbon of asphalt separating the Pacific from the performance of civilization. He wasn't leaving a life; he was simply moving the weight of it to a more honest location.",
-    marginalia: "Departure is the first act of witnessing. To move is to begin seeing the seams in the world's carefully constructed casing.",
-    nextScene: 'orange-county',
+    title: "THE LOAD-BEARING MAN: A Story",
+    location: "Author's Note",
+    text: "The city got two faces. One it shows you at noon—clean teeth, tourist smile, sunscreen and brunch. The other shows up around 3 a.m.—makeup smeared, neon flickering, truth leaking through the cracks like cheap tequila. I’ve slept through both. — Marcus, notebook, Day 9\n\nAuthor’s note: Marcus is a composite. The road is real. The observations come from lived ground-level experience. Some details are reshaped for narrative clarity. The sociology underneath this story is explored more formally in the companion academic paper. This version just shows the bones.",
+    marginalia: "The road is real. The observations come from lived ground-level experience.",
+    nextScene: 'chapter-1',
     deepDives: [
       {
         id: '31lb-baseline',
@@ -70,27 +70,33 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
       }
     ]
   },
-  'orange-county': {
-    title: "Chapter One: The Poster Coast",
-    location: "Orange County - Mile 85",
-    text: "The California coast they sell in airports is technically real. Turquoise water. The pier stretching polite into the horizon. But as Marcus rode through the manicured suburbs of the south, he saw the actual version. Same coastline, different truth. The lawns were too green for the drought, the air smelled of chlorine and expensive sunscreen. Here, the 'Poster City' was at its most aggressive. It was a curated performance of civic virtue, a place where the unexpected was systematically filtered out. He was a smudge on a perfect lens, a variable that the architecture wasn't designed to solve.",
-    marginalia: "The 'Poster City' requires the systematic exclusion of 'unexpected variables' to maintain its tourist smile. The outsider is the unedited truth.",
-    nextScene: 'santa-barbara',
+  'chapter-1': {
+    title: "CHAPTER ONE: What the Poster Doesn't Show",
+    location: "California Coast",
+    text: "The California coast they sell in airports is technically real. Marcus had seen it once. Back when airports were places he moved through instead of places he sat outside watching other people move through. Turquoise water. The pier stretching polite into the horizon. Some blonde in a sundress laughing into the wind like rent didn’t exist. Sky that perfect Photoshop blue. Now he was riding through the actual version. Same coastline. Different truth. The highway climbed over a town where the main drag had three vape shops, a payday loan joint glowing like a bad decision, a taqueria that had been feeding people since 1987, and a mural of a farmworker that kept getting tagged and repainted like a quiet argument nobody ever finished. Marcus kind of respected that mural. Someone paints dignity. Someone else sprays “fuck your dignity.” Then somebody fixes it again. That’s a conversation. Even if nobody admits it. Even if it never resolves. The wall keeps having it anyway, which is more than most people can say. The wall has been honest about the argument in a way the people having it usually refuse to be. The bike under him was a twenty-year-old Trek held together with a zip tie and stubbornness. He related. The pack weighed thirty-one pounds. He knew because he’d weighed it twice. When life gets chaotic, weight becomes useful information. Thirty-one pounds is honest. Thirty-one pounds doesn’t perform for an audience. It’s just the unvarnished number of what survival costs when you strip the overhead away. No presentation layer. No optimistic rounding. Just the mass of what’s actually necessary. He was eleven days out of San Diego. San Francisco sat up ahead inside the fog like a rumor. Between here and there: California. No filters. No crop. Just the raw cut.",
+    marginalia: "The wall has been honest about the argument in a way the people having it usually refuse to be.",
+    nextScene: 'chapter-2',
     deepDives: [
       {
         id: 'poster-vs-raw',
         label: "The Poster vs. The Raw Cut",
         icon: <Layers size={16} />,
         content: "The 'Poster City' is a curated performance of civic virtue. It requires the systematic exclusion of 'unexpected variables' to maintain its teeth-clean teeth, tourist smile. The 'Raw Cut' is the unedited machine running in the dark."
+      },
+      {
+        id: 'intermission-show',
+        label: "The Intermission Show",
+        icon: <BookOpen size={16} />,
+        content: "Housed people treat night as an intermission. For the outsider, the intermission is the real show. The city at 2 a.m. is a completely different animal."
       }
     ]
   },
-  'santa-barbara': {
-    title: "Chapter Two: The Market of Exclusion",
-    location: "Santa Barbara - Mile 210",
-    text: "In the shadow of the mission, the farmers market was a theater of provenance. Heirloom tomatoes in colors that shouldn't exist. Lavender honey. Marcus stood at the edge, his salt-stained shirt a stark contrast to the two-hundred-dollar yoga gear swirling around him. A woman noticed him noticing. Her body shifted half an inch—a tiny, subtle movement. Two steps sideways. It was the universal nonverbal for: unexpected variable detected, adjusting position, nothing to see here. The market didn't just sell food; it sold the comfort of a shared, curated reality.",
-    marginalia: "Avoidance behavior is a primary mechanism for maintaining social boundaries. The outsider is processed as a data variable to be bypassed.",
-    nextScene: 'pismo-taqueria',
+  'chapter-2': {
+    title: "CHAPTER TWO: The Poster City and Its Keepers",
+    location: "9:00 AM - Farmers Market",
+    text: "At 9 a.m. Marcus rolled into a farmers market that looked like a goddamn lifestyle magazine editorial meeting that had gotten out of hand and started growing vegetables. Heirloom tomatoes in colors that shouldn’t exist. Lavender honey. Cold brew in glass jars with little chalkboard signs. A guy playing acoustic guitar near the entrance—soft fingerpicking drifting through the air like the morning had hired background music to make sure nobody got too reflective. It was actually beautiful. Not ironic beautiful. Just curated beautiful. And Marcus had enough miles on him to know that curated beautiful is still beautiful. The curation doesn’t cancel the thing itself. He’d made peace with that distinction somewhere around Santa Barbara. The performance of a value doesn’t automatically negate the value being performed. People can mean something and perform it at the same time. The performance is how the meaning gets communicated. This is not a contradiction. This is just how humans work. He locked his bike and walked through slow. He wasn’t in a hurry. He was rarely in a hurry. Urgency is mostly manufactured. People watching at a farmers market is like a sociology seminar with better snacks and lower admission requirements. There’s a posture people adopt there. Canvas tote over the shoulder. Coffee cup as prop. The relaxed expression of someone who has made thoughtful choices about how to exist on the planet and wouldn’t object if this were acknowledged. Upright. Unhurried. Slightly glowing with the specific satisfaction of people who believe they are, at this moment, doing the right thing. Not performing the right thing—actually doing it. The farmer’s market is one of the few places where that distinction collapses completely, which may be why people love it so much. There’s a voice too. Just loud enough for nearby strangers to overhear. Not shouting—performing. The farmers market voice is calibrated for ambient receipt. What you say should be receivable as evidence of who you are. You are the kind of person who asks about the farming practices of a tomato. The record should reflect this. The strangers around you are the record. There’s a transaction style. You ask the vendor a question you already know the answer to, because the question was never really about the answer. It was about demonstrating, in a semipublic setting, that you are someone who cares about provenance. That’s not dishonest. That’s social. All performance is deliberate without necessarily being insincere. Marcus had learned to stop collapsing those two things. He watched all of it with genuine affection. The tomatoes were actually good. The honey vendor had the specific radiance of someone who had found the exact intersection of their values and their livelihood and settled there without apology. The Townes Van Zandt song drifting from the guitar player—Marcus thought: yeah, man. You and me both. Standing at the edge of something watching it happen, playing for people who aren’t quite listening. I know that assignment. A woman in two-hundred-dollar yoga gear noticed him noticing. Her body shifted half an inch. Tiny movement. Subtle. Smooth. Two steps sideways with the fluid naturalness of someone who has practiced—has genuinely practiced—moving away from unexpected variables without appearing to move away from unexpected variables. The universal nonverbal for: unexpected variable detected, adjusting position, nothing to see here. She didn’t glare. Didn’t say anything. Didn’t make it a thing. That was the sophistication of it. She made it nothing, which is how you make it stick. If Marcus had his notebook out he would have written: Avoidance, Level: Olympic.",
+    marginalia: "All performance is deliberate without necessarily being insincere.",
+    nextScene: 'chapter-3',
     deepDives: [
       {
         id: 'avoidance-mechanics',
@@ -100,12 +106,12 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
       }
     ]
   },
-  'pismo-taqueria': {
-    title: "Chapter Three: The Structural Solution",
-    location: "Pismo Beach - Mile 290",
-    text: "The taqueria was loud, smelling of cilantro and hot oil. Two guys at the next table were deep in a disagreement that felt older than the building. They paused when Marcus sat down, the air between them thick with unresolved tension. Then, the pressure change—the way a room shifts when two people who've been pulling against each other suddenly have a reason to stop. They oriented toward a third point. Him. They didn't know him, but they knew what he was for. He was the solution to their friction, a shared target that allowed them to suspend their antagonism at zero cost.",
-    marginalia: "The outsider functions as a low-cost consensus mechanism. Internal group tensions are resolved by orienting toward a shared external variable.",
-    nextScene: 'big-sur',
+  'chapter-3': {
+    title: "CHAPTER THREE: What He Was For",
+    location: "7:00 AM - Taqueria",
+    text: "The taqueria in the next town opened at 7 a.m. because 7 a.m. tacos are not a lifestyle choice. They’re for the overnight shift workers whose bodies have stopped respecting clocks. For the people whose schedules bent the architecture of the day into something the brunch economy doesn’t recognize. For the people who were up at 4 and haven’t decided whether to sleep or keep going. The woman in the back made tortillas by hand. The calm repetition of someone who had executed the same motion ten thousand times and knew exactly what the motion would produce. Skill at that level stops being performance and becomes permanence—a thing that continues through you rather than belonging to you, that will outlast you the way the taqueria itself would outlast every venture concept that had tried to establish itself within a three-block radius in the last decade. The taqueria had been here since 1987. The juice bar had lasted fourteen months. The artisanal pickle shop had lasted six. The tortilla woman had been here since before all of them and would be here after. Some things are load-bearing. Some things are decorative. The market sorts them out eventually. Marcus sat outside. Sun hitting the table at the right angle. Outside was where he thought best. Open air, open sight lines. No walls deciding what was visible. Two guys at the next table were deep in something. Not a casual disagreement. Something that had been cooking for weeks, that had accumulated history and grievance, that was using this particular morning as today’s venue the way long arguments use whatever surface is available. One had neck tattoos Marcus had learned to read the way you learn to read weather—as information about where you are, what the pressure is, which direction things might move. The other had the exhaustion of a man who’d been orbiting that world without full membership in it. That’s its own complicated country. Costs a lot to maintain the distance. You’re paying the social tax of proximity without receiving the social benefits of belonging. They paused when Marcus sat down. He ordered. He watched a pigeon work a dropped tortilla chip with the focused precision of a professional. Complete commitment to the problem. No self-consciousness. No awareness of being observed and no modification of behavior in response to being observed. Just the chip, and the methodology for acquiring it. Marcus respected it. He didn’t look at the two men. But he felt the thing happen. It was atmospheric before it was visible. A pressure change—the way a room shifts when two people who’ve been pulling against each other suddenly have a reason to stop. The argument didn’t pause. It redirected. Two people oriented against each other found a third point and briefly, wordlessly, oriented toward it together instead. Not friends. Not resolved. Just momentarily aligned. Marcus had felt this enough times to recognize it the way you recognize weather coming before you can see the clouds. It had a texture. A quality of attention that was more unified than the normal ambient awareness of strangers sharing a space. Two instruments that had been playing against each other landing, for a moment, on the same note. He ate his food. The tortillas were perfect. The pigeon got the chip. He paid. He left the tip. He got back on the bike.",
+    marginalia: "The outsider is free consensus.",
+    nextScene: 'chapter-4',
     deepDives: [
       {
         id: 'free-consensus',
@@ -121,48 +127,12 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
       }
     ]
   },
-  'big-sur': {
-    title: "Chapter Four: The Silence of the Grade",
-    location: "Big Sur - Mile 360",
-    text: "The climb out of San Simeon is a lesson in humility. The road clings to the cliffs like a desperate thought. Marcus felt every ounce of the thirty-one pounds as he ground up the grades, the Pacific crashing hundreds of feet below. Here, the city was gone, replaced by the indifferent roar of the ocean and the silence of the redwoods. In the absence of people, the weight became purely physical. There was no social friction to bear, only the gravity of the earth. It was a different kind of load, one that didn't require a witness, only endurance.",
-    marginalia: "In the wild, weight is just physics. In the city, weight is a social statement. The transition between the two is where the truth lives.",
-    nextScene: 'santa-cruz',
-    deepDives: [
-      {
-        id: 'structural-labor',
-        label: "Structural Labor",
-        icon: <Layers size={16} />,
-        content: "The folk devil position constitutes a form of involuntary structural labor. The costs are borne by the individual, while the benefits of social cohesion accrue to the community."
-      }
-    ]
-  },
-  'santa-cruz': {
-    title: "Chapter Five: The Thermal Curriculum",
-    location: "Santa Cruz - Mile 440",
-    text: "Night in Santa Cruz is a technical negotiation. Marcus found a spot behind a coffee roaster where the brick walls still hummed with the day's heat. Brick is a battery; concrete is a thief. A man in a bathrobe walking a dog stopped. 'Good spot,' he said, his voice low. 'Brick holds heat,' Marcus replied. The man nodded, a brief moment of shared understanding between two versions of the city. The city teaches its curriculum through the physical properties of its materials, but only to those who are forced to listen. To the bathrobe philosopher, Marcus was a peer; to the yoga gear, he was a ghost.",
-    marginalia: "The city teaches its curriculum through the physical properties of its materials. Survival is a technical negotiation with the architecture.",
-    nextScene: 'san-francisco',
-    deepDives: [
-      {
-        id: 'thermal-real-estate',
-        label: "Thermal Real Estate",
-        icon: <Weight size={16} />,
-        content: "The city teaches its curriculum through the physical properties of its materials. Brick is a battery; concrete is a thief. Survival is a technical negotiation with the architecture."
-      },
-      {
-        id: 'intermission-show',
-        label: "The Intermission Show",
-        icon: <BookOpen size={16} />,
-        content: "Housed people treat night as an intermission. For the outsider, the intermission is the real show. The city at 2 a.m. is a completely different animal."
-      }
-    ]
-  },
-  'san-francisco': {
-    title: "Chapter Six: The System Witness",
-    location: "San Francisco - Mile 510",
-    text: "He reached the overpass at dusk, the fog sliding in under the Golden Gate like a cold secret. An older man, his face a map of long-forgotten journeys, settled nearby. 'You just arrive?' he asked. 'Eleven days from San Diego,' Marcus said. The man smiled, a slow, knowing thing. 'Man who sees the whole system—he's inconvenient. So they make him the problem.' Marcus looked out at the lights of the city, the machine running its actual operations without the casing on. He had seen the whole thing, from the manicured lawns to the thermal batteries. He was the witness they couldn't afford to believe.",
-    marginalia: "The witness is perceived as a threat to the curated narrative. Making the witness 'the problem' is a defensive maneuver by the system.",
-    nextScene: 'epilogue',
+  'chapter-4': {
+    title: "CHAPTER FOUR: The Education of the Outside",
+    location: "The Curriculum",
+    text: "By the time he hit the next stretch of coast Marcus had been working out a question for forty miles: Not what had been done to him. What the position had given him. Because it had given him something. He wasn’t being sentimental about it. He wasn’t performing gratitude for adversity. He was trying to be accurate, which meant acknowledging both the cost and the curriculum. And the cost was real—it had to be named before the curriculum could be named, because collapsing them together was its own kind of dishonesty. The cost: You carry a weight that isn’t distributed. Every room you enter you enter contested. Every transaction requires more energy than it should because the baseline is wrong—you’re not starting from neutral, you’re starting from the deficit that the outsider-coding has already established before you’ve said anything or done anything. You pay a social tax on every interaction that the housed person pays nothing on. The coffee at the farmers market costs the same dollar amount but it costs more in the currency that doesn’t appear on receipts. The currency of having to prove, continuously, that you’re not the thing they’ve already decided you are. And you can’t pay that tax down. You can’t accumulate credit. Good behavior doesn’t reduce the rate. The rate is set not by your conduct but by your category, and the category is set by something that precedes your conduct entirely. You can be impeccably polite and correctly change and composure-in-the-face-of-provocation and none of it moves the needle. The function requires the outsider to remain available, which means the outsider’s good behavior has to be either invisible or reinterpreted as cunning. The system doesn’t have a redemption pathway. It doesn’t need one. Redemption would defeat the purpose. That was the cost. He was clear about it because clarity was the only thing it couldn’t take from him. The curriculum was this: he had been given access to the city that the city didn’t consent to. Housed people experience the city the way the city wants to be experienced—curated, managed, presenting its better version during the hours it keeps available for public inspection. He had experienced the city the way you experience a person when they don’t know you’re in the room: the dropped performance, the private negotiation, the actual face rather than the presented one. He had seen a city councilman once, 2 a.m., in a parking lot doing something the councilman would not have done if he’d known anyone was awake. He had seen a pastor leave a building he shouldn’t have been leaving at an hour he shouldn’t have been there. Not because Marcus was investigating or documenting. Just because he was present and awake while the city thought it was unobserved. The city had not consented to being seen. It had simply forgotten he was there. Or it had decided, based on the category, that he didn’t count as an audience. None of it was exceptional. That was the thing. This wasn’t surveillance of remarkable behavior. It was just the normal operations of people and institutions that had stopped performing because they believed the audience had gone home. The delivery infrastructure, the maintenance crews, the people who kept the poster version available and presentable for morning—all of it running in the dark, essential, invisible, unacknowledged in any version of the city that anyone chose to advertise. The witness position wasn’t comfortable. Marcus was not recommending it. But it was a position, and it had epistemological consequences—consequences about what you knew and couldn’t un-know and couldn’t be argued out of. That last part was the problem. You could challenge someone’s opinion. You could challenge their inference. You could challenge their analysis. You couldn’t challenge what they’d watched with their own eyes from twenty feet away in a sleeping bag. Testimony is harder to dismiss than argument. The city had given him testimony by accident, just by running itself while he was present, and that testimony lived in him now and could not be extracted.",
+    marginalia: "A man who has seen the whole system is inconvenient not because he is dangerous but because he is a witness.",
+    nextScene: 'chapter-5',
     deepDives: [
       {
         id: 'witness-problem',
@@ -172,11 +142,41 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
       }
     ]
   },
+  'chapter-5': {
+    title: "CHAPTER FIVE: What Gets Carried and What Gets Built",
+    location: "Morro Bay to SLO",
+    text: "The coast between Morro Bay and San Luis Obispo does something specific to light in the late afternoon. It flattens it, makes it horizontal, turns it almost architectural—like the light itself is load-bearing, holding up the visible world from the west. Marcus had been watching this effect for three days and hadn’t found the right word for it yet. He’d been trying. The notebook had four attempts. None of them were right. He stopped on a cliff overlook and ate an apple and watched the Pacific doing its thing. The question that had been building for forty miles was still building. It had gotten more specific. It wasn’t just about the cost and the curriculum anymore. It was about what you do with the information the position generates. Because the information is real. The testimony is real. The witness is credible even if the category says otherwise. A fact doesn’t stop being a fact because the person who observed it has been assigned an illegibility function by the community whose operations the fact would complicate. The question was: what do you do with what you know, when what you know is not supposed to be knowable by someone in your position? He didn’t have an answer yet. He ate the apple. He kept riding. There was a conversation in the next town that he thought about for the rest of the trip. He’d stopped at a library to use the WiFi and charge his phone—libraries are the only institution in America that still functions with something close to unconditional access, which is why they’re always being defunded by people who don’t understand what they’re actually paying for. A librarian had looked up from the reference desk when he walked in. Not the reflexive assessment he’d gotten elsewhere. Just: person entering building, does this person need something. “Anything I can help you find?” she said. He thought about it for a second. “Do you have anything on Durkheim?” She pulled up the catalog. “We have a couple things. You looking for primary or secondary?” “Either,” he said. “I’m trying to understand something about how communities hold together when they don’t have a lot in common.” She found it. He sat for two hours. He took notes in the same notebook where he’d been recording everything else. When he left she said, “Good luck with the research.” He said, “Thank you for treating this like research.” She looked a little confused. He didn’t explain. He went back to the bike. He thought about that interaction for fifty miles. The unconditional access. The question asked without prior assessment. The research treated as research because the person doing it said it was research, and that was enough. The default that was applied. He couldn’t identify any other institution in the last eleven days that had applied that default.",
+    marginalia: "The research treated as research because the person doing it said it was research, and that was enough.",
+    nextScene: 'chapter-6',
+    deepDives: [
+      {
+        id: 'structural-labor',
+        label: "Structural Labor",
+        icon: <Layers size={16} />,
+        content: "The folk devil position constitutes a form of involuntary structural labor. The costs are borne by the individual, while the benefits of social cohesion accrue to the community."
+      }
+    ]
+  },
+  'chapter-6': {
+    title: "CHAPTER SIX: The City at Night Tells the Truth",
+    location: "San Francisco - Dusk",
+    text: "He reached San Francisco at dusk, which was the best possible time to reach it. The light does a specific thing on the California coast in the evening. Goes gold, then amber, then a color that doesn’t exist in any language Marcus knew—some threshold frequency between orange and disappearance. Fog sliding in under the bridge. The towers catching the last light like they were holding onto it on purpose. From a car it looks cinematic. From a bike you’re inside the light, not watching it. That’s the difference. Eleven days of coast had given him a lot of things from the inside. He found a concrete ledge under an overpass near the water. Not inside the camp—territories matter and protocols exist for reasons, and you don't walk into an established community without introduction and expect to be received as anything but a problem. But close enough to the water to have a view, sitting up, of the bay and the bridge lights coming on. He ate something from the pack and watched the city execute its nightly switch. Tourist infrastructure lit up, filled with people who had paid for the poster version. Financial towers emptied, their occupants dispersed to the neighborhoods that didn’t appear in any tourism materials. The working neighborhoods—the actual structural base of the city, the places that fed and moved and maintained everything that made the poster version possible—kept doing what they always did. Unhurried. Unperforming. The restaurants feeding the people who needed feeding. The buses moving the people who needed moving. The whole enormous mechanism of a city that didn’t care whether anyone was watching. The poster city and the actual city running simultaneously on the same infrastructure. Both real. Both necessary. The poster city needing the actual city to exist, and declining to acknowledge it. The actual city needing the poster city’s resources to keep running, and receiving those resources at a discount, through back channels, without credit. The two cities in a relationship that neither had formally agreed to, sustained by the labor of people neither city talked about in public. He thought: I have been both of those cities’ infrastructure for eleven days. The poster city used me as its villain. The actual city taught me its operating system. Neither one asked permission. A man settled nearby at the right distance. The distance that communicates: I am not a threat, I am not asking for anything, I am not going to make this complicated. The distance that people who sleep outside learn to calibrate because getting it wrong—too close or too far—sends the wrong signal and signals have consequences. He was older. Vietnamese American. The particular stillness of someone who had been in a lot of different situations and learned early that stillness is usually the strongest opening move. They sat in silence while the bridge lights came fully on. “You just arrive?” the man said. “Eleven days from San Diego,” Marcus said. The man made a sound that wasn’t quite a laugh. Appreciation, maybe, for the specificity. When you live outside, numbers are more reliable than impressions. People who live outside know this about each other. “See anything interesting?” “Yeah,” Marcus said. “Lot of good things. Lot of funny shit too.” “Funny how?” Marcus leaned back on the ledge. Thought about eleven days. The coyote. The crying banker. The tortilla woman making something that would outlast her. The bathrobe philosopher and the structural engineering of a good brick wall. The farmers market, beautiful and performing simultaneously, both things true at once. The teenager in the doorway. The pigeon’s complete professional commitment to the tortilla chip. The couple’s four-minute operatic reconciliation. The guitar player doing Townes in the middle of the boutique vegetable situation. The librarian who asked what he needed and meant it. “You ever just watch a fancy farmers market?” he said. “Stand at the edge and actually watch it?” The man smiled. “Yeah.” “Everyone performing health. Canvas bag. Question about the tomatoes they already know the answer to. Loud enough that the people nearby receive it as character evidence.” Marcus shrugged. “But the tomatoes are actually good. The honey is actually good. Both things are running on the same hardware at the same time. You can only see both if you’re outside the performance.” The man nodded. “Same town, twelve hours later. Guy in a bathrobe evaluates the thermal properties of my windbreak like we’re reviewing real estate. Both of those people are the city. Neither knows the other exists the way I know both of them. I carry both versions. The city keeps them in separate files.” Fog moved further in across the water. The bridge was half visible now, half implied. “That’s what they’re afraid of,” the man said. Marcus looked at him. “You just arrive?” the man said. “Eleven days from San Diego,” Marcus said. The man made a sound that wasn’t quite a laugh. Appreciation, maybe, for the specificity. When you live outside, numbers are more reliable than impressions. People who live outside know this about each other. “See anything interesting?” “Yeah,” Marcus said. “Lot of good things. Lot of funny shit too.” “Funny how?” Marcus leaned back on the ledge. Thought about eleven days. The coyote. The crying banker. The tortilla woman making something that would outlast her. The bathrobe philosopher and the structural engineering of a good brick wall. The farmers market, beautiful and performing simultaneously, both things true at once. The teenager in the doorway. The pigeon’s complete professional commitment to the tortilla chip. The couple’s four-minute operatic reconciliation. The guitar player doing Townes in the middle of the boutique vegetable situation. The librarian who asked what he needed and meant it. “You ever just watch a fancy farmers market?” he said. “Stand at the edge and actually watch it?” The man smiled. “Yeah.” “Everyone performing health. Canvas bag. Question about the tomatoes they already know the answer to. Loud enough that the people nearby receive it as character evidence.” Marcus shrugged. “But the tomatoes are actually good. The honey is actually good. Both things are running on the same hardware at the same time. You can only see both if you’re outside the performance.” The man nodded. “Same town, twelve hours later. Guy in a bathrobe evaluates the thermal properties of my windbreak like we’re reviewing real estate. Both of those people are the city. Neither knows the other exists the way I know both of them. I carry both versions. The city keeps them in separate files.” Fog moved further in across the water. The bridge was half visible now, half implied. “That’s what they’re afraid of,” the man said. Marcus looked at him. “You just arrive?” the man said. “Eleven days from San Diego,” Marcus said. The man made a sound that wasn’t quite a laugh. Appreciation, maybe, for the specificity. When you live outside, numbers are more reliable than impressions. People who live outside know this about each other. “See anything interesting?” “Yeah,” Marcus said. “Lot of good things. Lot of funny shit too.” “Funny how?” Marcus leaned back on the ledge. Thought about eleven days. The coyote. The crying banker. The tortilla woman making something that would outlast her. The bathrobe philosopher and the structural engineering of a good brick wall. The farmers market, beautiful and performing simultaneously, both things true at once. The teenager in the doorway. The pigeon’s complete professional commitment to the tortilla chip. The couple’s four-minute operatic reconciliation. The guitar player doing Townes in the middle of the boutique vegetable situation. The librarian who asked what he needed and meant it. “You ever just watch a fancy farmers market?” he said. “Stand at the edge and actually watch it?” The man smiled. “Yeah.” “Everyone performing health. Canvas bag. Question about the tomatoes they already know the answer to. Loud enough that the people nearby receive it as character evidence.” Marcus shrugged. “But the tomatoes are actually good. The honey is actually good. Both things are running on the same hardware at the same time. You can only see both if you’re outside the performance.” The man nodded. “Same town, twelve hours later. Guy in a bathrobe evaluates the thermal properties of my windbreak like we’re reviewing real estate. Both of those people are the city. Neither knows the other exists the way I know both of them. I carry both versions. The city keeps them in separate files.” Fog moved further in across the water. The bridge was half visible now, half implied. “That’s what they’re afraid of,” the man said. Marcus looked at him. “That you can see that.” He was quiet a moment. The bridge fog shifted. “Man who sees the whole system—he’s inconvenient. So they make him the problem. Easier than letting him describe what he’s seen.” “Yeah,” Marcus said. “Question is what you do with it.” Marcus hadn’t expected that. He looked at the man. “You got testimony,” the man said. “Real testimony. Not argument. Not inference. What you actually saw. From where you actually were. That’s a different kind of thing than what most people have.” He looked at the water. “Most people got opinions. You got witness.” “Nobody’s going to receive it as that,” Marcus said. “Not yet,” the man said. “But testimony doesn’t expire. It stays what it is until someone decides to look at it properly.” He said it the way you say something you worked out a long time ago and haven’t needed to revise since. Then he stood, unhurried, and walked in the direction of the camp. Marcus watched him go. The bridge sat in the fog. The city sat under it, running its nightly operations in all registers simultaneously—poster version and real version and the version that only exists when no one is managing it. Beautiful and ridiculous and true. All at once. Somewhere a siren moved through several streets and faded. Someone laughed in the distance, the laugh carrying further than they’d intended in the night air. Marcus lay back on the concrete ledge. He thought: I have seen the whole machine. He thought: eso no lo pueden perdonar. That’s the one thing they can’t forgive. He opened the notebook. Wrote the date. Wrote: Eleven days. San Diego to San Francisco. What the position costs. What the position gives. What you do with testimony when the institution that should receive it has been built to refuse it. Starting to figure out the last one. He closed the notebook.",
+    marginalia: "Testimony doesn't expire. It stays what it is until someone decides to look at it properly.",
+    nextScene: 'epilogue',
+    deepDives: [
+      {
+        id: 'thermal-real-estate',
+        label: "Thermal Real Estate",
+        icon: <Weight size={16} />,
+        content: "The city teaches its curriculum through the physical properties of its materials. Brick is a battery; concrete is a thief. Survival is a technical negotiation with the architecture."
+      }
+    ]
+  },
   'epilogue': {
-    title: "Epilogue: The Load-Bearing Man",
+    title: "The Load-Bearing Man",
     location: "The End of the Road",
-    text: "The journey was over, but the weight remained. Some communities carry their weight on bridges and buildings, engineered and calculated. Others carry it on people, unacknowledged and invisible. The load-bearing man didn't volunteer for the position, but the architecture of the city was built around him anyway. He was the anchor for their cohesion, the target for their tensions, the witness to their unedited truths. Marcus closed his eyes, the hum of the road still in his bones. The road was real. The weight was real. And for now, that was enough.",
-    marginalia: "The 'Load-Bearing Man' is a structural necessity in certain social architectures, bearing the weight of communal cohesion through exclusion.",
+    text: "Some communities carry their weight on bridges and buildings. Others carry it on people. The load-bearing man didn’t volunteer for the position. The architecture was built around him anyway. He closed his eyes. And slept.",
+    marginalia: "The architecture was built around him anyway.",
     nextScene: 'prologue',
     deepDives: [
       {
@@ -262,12 +262,12 @@ const Marginalia = ({ text, progress }: { text: string, progress: number }) => (
 const PageInfo = ({ miles, load, scene }: { miles: number, load: number, scene: SceneId }) => {
   const pageMap: Record<SceneId, number> = {
     prologue: 1,
-    'orange-county': 12,
-    'santa-barbara': 28,
-    'pismo-taqueria': 45,
-    'big-sur': 62,
-    'santa-cruz': 84,
-    'san-francisco': 102,
+    'chapter-1': 12,
+    'chapter-2': 28,
+    'chapter-3': 45,
+    'chapter-4': 62,
+    'chapter-5': 84,
+    'chapter-6': 102,
     epilogue: 120
   };
 
@@ -372,12 +372,12 @@ export default function App() {
 
     const milesMap: Record<SceneId, number> = {
       prologue: 0,
-      'orange-county': 85,
-      'santa-barbara': 210,
-      'pismo-taqueria': 290,
-      'big-sur': 360,
-      'santa-cruz': 440,
-      'san-francisco': 510,
+      'chapter-1': 85,
+      'chapter-2': 210,
+      'chapter-3': 290,
+      'chapter-4': 360,
+      'chapter-5': 440,
+      'chapter-6': 510,
       epilogue: 510
     };
 
