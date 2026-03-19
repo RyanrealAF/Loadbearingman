@@ -18,15 +18,16 @@ import {
   Bookmark,
   FileText,
   Quote,
-  Volume2,
-  VolumeX,
-  Loader2
+  Menu,
+  ChevronLeft
 } from 'lucide-react';
-import { GoogleGenAI, Modality } from "@google/genai";
+
+import AcademicPaper from './components/AcademicPaper.tsx';
+import { PAPERS } from './data/papers';
 
 // --- Types ---
 
-type SceneId = 'prologue' | 'chapter-1' | 'chapter-2' | 'chapter-3' | 'chapter-4' | 'chapter-5' | 'chapter-6' | 'epilogue';
+type SceneId = 'prologue' | 'chapter-1' | 'chapter-2' | 'chapter-3' | 'chapter-4' | 'chapter-5' | 'chapter-6' | 'epilogue' | 'academic-paper';
 
 interface DeepDive {
   id: string;
@@ -41,6 +42,8 @@ interface StoryState {
   vibeShift: number;
   distanceTraveled: number;
   activeDeepDive: DeepDive | null;
+  selectedPaperId: string | null;
+  sidebarOpen: boolean;
 }
 
 // --- Content ---
@@ -62,6 +65,12 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
     marginalia: "The road is real. The observations come from lived ground-level experience.",
     nextScene: 'chapter-1',
     deepDives: [
+      {
+        id: 'academic-paper-link',
+        label: "Research Library: The Folk Devil Series",
+        icon: <FileText size={16} />,
+        content: "The sociology underneath this story is explored more formally in a series of companion academic papers. Access the full research library below."
+      },
       {
         id: '31lb-baseline',
         label: "The 31lb Baseline",
@@ -186,61 +195,18 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         content: "Testimony is harder to dismiss than argument. The city has given Marcus testimony by accident, just by running itself while he was present."
       }
     ]
+  },
+  'academic-paper': {
+    title: "BUILD WHILE BLEEDING",
+    location: "Formal Theory",
+    text: "The academic paper is being viewed in the overlay.",
+    marginalia: "Theory as survival.",
+    nextScene: 'prologue',
+    deepDives: []
   }
 };
 
 // --- Components ---
-
-const DeepDiveModal = ({ dive, onClose }: { dive: DeepDive, onClose: () => void }) => (
-  <motion.div 
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-stone-950/60 backdrop-blur-sm"
-    onClick={onClose}
-  >
-    <motion.div 
-      initial={{ scale: 0.95, y: 10 }}
-      animate={{ scale: 1, y: 0 }}
-      exit={{ scale: 0.95, y: 10 }}
-      className="bg-[#fffdfa] border border-stone-300 p-12 rounded-lg max-w-2xl w-full shadow-2xl space-y-8 relative"
-      onClick={e => e.stopPropagation()}
-    >
-      {/* Page Corner Fold Effect */}
-      <div className="absolute top-0 right-0 w-16 h-16 bg-stone-100 border-l border-b border-stone-300 rounded-bl-lg shadow-inner" />
-      
-      <div className="flex items-center justify-between border-b border-stone-200 pb-6">
-        <div className="flex items-center gap-4 text-stone-400">
-          <Bookmark size={18} />
-          <span className="font-serif text-xs italic tracking-wide">Appendix Excerpt</span>
-        </div>
-        <button onClick={onClose} className="text-stone-300 hover:text-stone-900 transition-colors p-2">
-          <X size={24} />
-        </button>
-      </div>
-
-      <div className="space-y-4">
-        <h3 className="text-3xl font-serif text-stone-900 leading-tight italic">{dive.label}</h3>
-      </div>
-
-      <div className="relative">
-        <Quote className="absolute -left-8 -top-4 text-stone-100 w-16 h-16 -z-10" />
-        <p className="text-stone-800 leading-relaxed font-serif text-xl italic">
-          {dive.content}
-        </p>
-      </div>
-
-      <div className="pt-8 flex justify-center">
-        <button 
-          onClick={onClose}
-          className="px-10 py-3 border border-stone-900 text-stone-900 font-serif italic text-sm hover:bg-stone-900 hover:text-stone-50 transition-all rounded-sm"
-        >
-          Return to Story
-        </button>
-      </div>
-    </motion.div>
-  </motion.div>
-);
 
 const Marginalia = ({ text, progress }: { text: string, progress: number }) => (
   <div className="relative group">
@@ -268,7 +234,8 @@ const PageInfo = ({ miles, load, scene }: { miles: number, load: number, scene: 
     'chapter-4': 62,
     'chapter-5': 84,
     'chapter-6': 102,
-    epilogue: 120
+    epilogue: 120,
+    'academic-paper': 0
   };
 
   return (
@@ -292,72 +259,14 @@ export default function App() {
     load: 31,
     vibeShift: 0,
     distanceTraveled: 0,
-    activeDeepDive: null
+    activeDeepDive: null,
+    selectedPaperId: null,
+    sidebarOpen: false
   });
-
-  const [isNarrating, setIsNarrating] = useState(false);
-  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   const currentBeat = STORY_BEATS[state.scene];
 
-  const handleNarration = async () => {
-    if (isNarrating) {
-      audioElement?.pause();
-      setIsNarrating(false);
-      return;
-    }
-
-    setIsLoadingAudio(true);
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: `Read this chapter of the book "The Load-Bearing Man" with a calm, literary, and slightly melancholic tone: ${currentBeat.text}` }] }],
-        config: {
-          responseModalities: [Modality.AUDIO],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: 'Kore' },
-            },
-          },
-        },
-      });
-
-      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-      if (base64Audio) {
-        const binaryString = window.atob(base64Audio);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        const blob = new Blob([bytes], { type: 'audio/mpeg' });
-        const url = URL.createObjectURL(blob);
-        
-        if (audioUrl) URL.revokeObjectURL(audioUrl);
-        setAudioUrl(url);
-
-        const audio = new Audio(url);
-        setAudioElement(audio);
-        setIsLoadingAudio(false);
-        setIsNarrating(true);
-        audio.play();
-        audio.onended = () => setIsNarrating(false);
-      }
-    } catch (error) {
-      console.error("Narration failed:", error);
-      setIsLoadingAudio(false);
-      setIsNarrating(false);
-    }
-  };
-
   const handleNext = () => {
-    if (audioElement) {
-      audioElement.pause();
-      setIsNarrating(false);
-    }
     const nextId = currentBeat.nextScene;
     if (nextId === 'prologue') {
       setState({
@@ -378,7 +287,8 @@ export default function App() {
       'chapter-4': 360,
       'chapter-5': 440,
       'chapter-6': 510,
-      epilogue: 510
+      epilogue: 510,
+      'academic-paper': 0
     };
 
     setState(prev => ({
@@ -392,6 +302,65 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-stone-950 flex items-center justify-center p-4 md:p-8 font-serif selection:bg-stone-200 selection:text-stone-900">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 bottom-0 z-[70] flex pointer-events-none">
+        <motion.div
+          initial={false}
+          animate={{ x: state.sidebarOpen ? 0 : -320 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          className="w-80 bg-[#f0ebe2] border-r border-stone-300 shadow-2xl pointer-events-auto flex flex-col"
+        >
+          <div className="p-6 border-b border-stone-300 flex items-center justify-between">
+            <h2 className="font-['Bebas_Neue'] text-2xl tracking-wider text-[#8b2e0f]">Research Library</h2>
+            <button 
+              onClick={() => setState(s => ({ ...s, sidebarOpen: false }))}
+              className="p-2 hover:bg-stone-200 rounded-full transition-colors"
+            >
+              <ChevronLeft size={20} className="text-stone-600" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            <button
+              onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: null, sidebarOpen: false }))}
+              className={`w-full text-left p-4 rounded-md transition-all font-['Space_Mono'] text-[0.65rem] uppercase tracking-wider ${!state.selectedPaperId && state.scene === 'academic-paper' ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
+            >
+              Library Overview
+            </button>
+            <div className="h-px bg-stone-300 my-4" />
+            {PAPERS.map(paper => (
+              <button
+                key={paper.id}
+                onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: paper.id, sidebarOpen: false }))}
+                className={`w-full text-left p-4 rounded-md transition-all group ${state.selectedPaperId === paper.id ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
+              >
+                <div className="font-['Space_Mono'] text-[0.55rem] uppercase tracking-widest mb-1 opacity-70">
+                  {paper.year}
+                </div>
+                <div className="font-['EB_Garamond'] text-sm italic font-medium leading-tight">
+                  {paper.title}
+                </div>
+              </button>
+            ))}
+          </div>
+          <div className="p-6 border-t border-stone-300 bg-stone-100/50">
+            <p className="font-['Space_Mono'] text-[0.5rem] uppercase tracking-widest text-stone-400">
+              Street-Level Studies · Vol. I
+            </p>
+          </div>
+        </motion.div>
+
+        {!state.sidebarOpen && (
+          <motion.button
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            onClick={() => setState(s => ({ ...s, sidebarOpen: true }))}
+            className="mt-6 ml-6 w-12 h-12 bg-white border border-stone-300 rounded-full shadow-lg flex items-center justify-center text-stone-600 hover:text-[#8b2e0f] hover:border-[#8b2e0f] transition-all pointer-events-auto group"
+          >
+            <BookOpen size={20} className="group-hover:scale-110 transition-transform" />
+          </motion.button>
+        )}
+      </div>
+
       {/* Background Atmosphere */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-20">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.1),transparent_70%)]" />
@@ -430,23 +399,6 @@ export default function App() {
                     <span className="text-stone-400 text-xs italic tracking-widest uppercase">
                       {currentBeat.location}
                     </span>
-                    <button 
-                      onClick={handleNarration}
-                      disabled={isLoadingAudio}
-                      className="flex items-center gap-2 text-stone-400 hover:text-stone-900 transition-colors group disabled:opacity-50"
-                      title={isNarrating ? "Stop Narration" : "Listen to Chapter"}
-                    >
-                      <span className="text-[10px] italic uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                        {isLoadingAudio ? "Preparing..." : isNarrating ? "Stop" : "Listen"}
-                      </span>
-                      {isLoadingAudio ? (
-                        <Loader2 size={16} className="animate-spin" />
-                      ) : isNarrating ? (
-                        <VolumeX size={16} className="text-stone-900" />
-                      ) : (
-                        <Volume2 size={16} />
-                      )}
-                    </button>
                   </div>
                   <h1 className="text-4xl md:text-5xl font-serif text-stone-900 leading-tight italic">
                     {currentBeat.title}
@@ -514,10 +466,76 @@ export default function App() {
       {/* Deep Dive Modal */}
       <AnimatePresence>
         {state.activeDeepDive && (
-          <DeepDiveModal 
-            dive={state.activeDeepDive} 
-            onClose={() => setState(s => ({ ...s, activeDeepDive: null }))} 
-          />
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-stone-950/60 backdrop-blur-sm"
+            onClick={() => setState(s => ({ ...s, activeDeepDive: null }))}
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              className="bg-[#fffdfa] border border-stone-300 p-12 rounded-lg max-w-2xl w-full shadow-2xl space-y-8 relative"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Page Corner Fold Effect */}
+              <div className="absolute top-0 right-0 w-16 h-16 bg-stone-100 border-l border-b border-stone-300 rounded-bl-lg shadow-inner" />
+              
+              <div className="flex items-center justify-between border-b border-stone-200 pb-6">
+                <div className="flex items-center gap-4 text-stone-400">
+                  <Bookmark size={18} />
+                  <span className="font-serif text-xs italic tracking-wide">Appendix Excerpt</span>
+                </div>
+                <button onClick={() => setState(s => ({ ...s, activeDeepDive: null }))} className="text-stone-300 hover:text-stone-900 transition-colors p-2">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-3xl font-serif text-stone-900 leading-tight italic">{state.activeDeepDive.label}</h3>
+              </div>
+
+              <div className="relative">
+                <Quote className="absolute -left-8 -top-4 text-stone-100 w-16 h-16 -z-10" />
+                <p className="text-stone-800 leading-relaxed font-serif text-xl italic">
+                  {state.activeDeepDive.content}
+                </p>
+              </div>
+
+              <div className="pt-8 flex flex-col items-center gap-4">
+                {state.activeDeepDive.id === 'academic-paper-link' && (
+                  <button 
+                    onClick={() => setState(s => ({ ...s, scene: 'academic-paper', activeDeepDive: null }))}
+                    className="w-full px-10 py-4 bg-[#8b2e0f] text-white font-serif italic text-lg hover:bg-[#a03a1a] transition-all rounded-sm shadow-lg flex items-center justify-center gap-3"
+                  >
+                    <BookOpen size={20} />
+                    Open Research Library
+                  </button>
+                )}
+                <button 
+                  onClick={() => setState(s => ({ ...s, activeDeepDive: null }))}
+                  className="px-10 py-3 border border-stone-900 text-stone-900 font-serif italic text-sm hover:bg-stone-900 hover:text-stone-50 transition-all rounded-sm"
+                >
+                  Return to Story
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Academic Paper Overlay */}
+      <AnimatePresence>
+        {state.scene === 'academic-paper' && (
+          <div className="fixed inset-0 z-[60] overflow-y-auto">
+            <AcademicPaper 
+              selectedPaperId={state.selectedPaperId}
+              onSelectPaper={(id) => setState(s => ({ ...s, selectedPaperId: id }))}
+              onBack={() => setState(s => ({ ...s, scene: 'prologue', selectedPaperId: null }))} 
+            />
+          </div>
         )}
       </AnimatePresence>
     </div>
