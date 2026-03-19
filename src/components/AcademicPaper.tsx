@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Copy, Check } from 'lucide-react';
 import { PAPERS, AcademicPaperData } from '../data/papers';
 
 interface AcademicPaperProps {
@@ -10,7 +10,21 @@ interface AcademicPaperProps {
 }
 
 const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, onSelectPaper }) => {
+  const [copied, setCopied] = useState(false);
   const selectedPaper = PAPERS.find(p => p.id === selectedPaperId);
+
+  const handleCopyCitation = (paper: AcademicPaperData) => {
+    const citation = `${paper.author} (${paper.year}). ${paper.title}. Street-Level Studies, Vol. I. Retrieved from ${paper.domain}`;
+    navigator.clipboard.writeText(citation);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const calculateReadingTime = (paper: AcademicPaperData) => {
+    const wordCount = paper.sections.reduce((acc, section) => 
+      acc + section.content.reduce((sAcc, para) => sAcc + para.split(' ').length, 0), 0);
+    return Math.ceil(wordCount / 200);
+  };
 
   const renderLibrary = () => (
     <div className="max-w-[900px] mx-auto px-6 py-20 relative">
@@ -91,8 +105,15 @@ const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, 
         <div className="mt-7 flex flex-wrap gap-8 font-['Space_Mono',_monospace] text-[0.6rem] tracking-[0.1em] text-[#6b6560] uppercase">
           <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Author</strong> {paper.author}</span>
           <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Domain</strong> {paper.domain}</span>
-          <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Contact</strong> {paper.contact}</span>
           <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Year</strong> {paper.year}</span>
+          <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Reading Time</strong> {calculateReadingTime(paper)} min</span>
+          <button 
+            onClick={() => handleCopyCitation(paper)}
+            className="flex items-center gap-2 text-[#8b2e0f] hover:opacity-70 transition-opacity"
+          >
+            {copied ? <Check size={12} /> : <Copy size={12} />}
+            <span>{copied ? 'Citation Copied' : 'Copy Citation'}</span>
+          </button>
         </div>
       </div>
 

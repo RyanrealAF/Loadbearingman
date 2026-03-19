@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 
 import AcademicPaper from './components/AcademicPaper.tsx';
+import MiniMap from './components/MiniMap.tsx';
+import LoadManager from './components/LoadManager.tsx';
 import { PAPERS } from './data/papers';
 
 // --- Types ---
@@ -55,6 +57,7 @@ interface StoryBeat {
   marginalia: string;
   nextScene: SceneId;
   deepDives: DeepDive[];
+  relatedPaperIds?: string[];
 }
 
 const STORY_BEATS: Record<SceneId, StoryBeat> = {
@@ -77,7 +80,8 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         icon: <Weight size={16} />,
         content: "Weight is honest information. In a chaotic environment, the unvarnished number of what survival costs provides a structural anchor. 31 pounds is the overhead of existence when stripped of institutional support."
       }
-    ]
+    ],
+    relatedPaperIds: ['bwb-001']
   },
   'chapter-1': {
     title: "CHAPTER ONE: What the Poster Doesn't Show",
@@ -98,7 +102,8 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         icon: <BookOpen size={16} />,
         content: "Housed people treat night as an intermission. For the outsider, the intermission is the real show. The city at 2 a.m. is a completely different animal."
       }
-    ]
+    ],
+    relatedPaperIds: ['fd-001']
   },
   'chapter-2': {
     title: "CHAPTER TWO: The Poster City and Its Keepers",
@@ -113,7 +118,8 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         icon: <Search size={16} />,
         content: "The micro-adjustment of body language communicates a data point to the space: this presence is a variable to be managed. The space organizes around the variable, creating a brief, unconscious consensus of exclusion."
       }
-    ]
+    ],
+    relatedPaperIds: ['fd-001']
   },
   'chapter-3': {
     title: "CHAPTER THREE: What He Was For",
@@ -134,7 +140,8 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         icon: <Activity size={16} />,
         content: "The co-activation of Anxiety, Contempt, and Disgust. This affective configuration triggers intergroup aggression reliably, bypassing shared values."
       }
-    ]
+    ],
+    relatedPaperIds: ['fd-001', 'uw-001']
   },
   'chapter-4': {
     title: "CHAPTER FOUR: The Education of the Outside",
@@ -149,7 +156,8 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         icon: <Search size={16} />,
         content: "You cannot unwitness something. The city's preferred version requires the outsider to be illegible—to be the problem—so that the unedited version of the city cannot circulate."
       }
-    ]
+    ],
+    relatedPaperIds: ['uw-001', 'psych-001']
   },
   'chapter-5': {
     title: "CHAPTER FIVE: What Gets Carried and What Gets Built",
@@ -164,7 +172,8 @@ const STORY_BEATS: Record<SceneId, StoryBeat> = {
         icon: <Layers size={16} />,
         content: "The folk devil position constitutes a form of involuntary structural labor. The costs are borne by the individual, while the benefits of social cohesion accrue to the community."
       }
-    ]
+    ],
+    relatedPaperIds: ['bwb-001', 'psych-001']
   },
   'chapter-6': {
     title: "CHAPTER SIX: The City at Night Tells the Truth",
@@ -319,28 +328,52 @@ export default function App() {
               <ChevronLeft size={20} className="text-stone-600" />
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            <button
-              onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: null, sidebarOpen: false }))}
-              className={`w-full text-left p-4 rounded-md transition-all font-['Space_Mono'] text-[0.65rem] uppercase tracking-wider ${!state.selectedPaperId && state.scene === 'academic-paper' ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
-            >
-              Library Overview
-            </button>
+          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+            <div className="space-y-2">
+              <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2">Chapters</h3>
+              {Object.keys(STORY_BEATS).filter(key => key !== 'academic-paper').map(key => (
+                <button
+                  key={key}
+                  onClick={() => setState(s => ({ ...s, scene: key as SceneId, sidebarOpen: false }))}
+                  className={`w-full text-left p-2 rounded-md transition-all font-serif italic text-sm ${state.scene === key ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
+                >
+                  {STORY_BEATS[key as SceneId].title}
+                </button>
+              ))}
+            </div>
+
             <div className="h-px bg-stone-300 my-4" />
-            {PAPERS.map(paper => (
+
+            <div className="space-y-2">
+              <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2">Research Papers</h3>
               <button
-                key={paper.id}
-                onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: paper.id, sidebarOpen: false }))}
-                className={`w-full text-left p-4 rounded-md transition-all group ${state.selectedPaperId === paper.id ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
+                onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: null, sidebarOpen: false }))}
+                className={`w-full text-left p-4 rounded-md transition-all font-['Space_Mono'] text-[0.65rem] uppercase tracking-wider ${!state.selectedPaperId && state.scene === 'academic-paper' ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
               >
-                <div className="font-['Space_Mono'] text-[0.55rem] uppercase tracking-widest mb-1 opacity-70">
-                  {paper.year}
-                </div>
-                <div className="font-['EB_Garamond'] text-sm italic font-medium leading-tight">
-                  {paper.title}
-                </div>
+                Library Overview
               </button>
-            ))}
+              {PAPERS.map(paper => (
+                <button
+                  key={paper.id}
+                  onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: paper.id, sidebarOpen: false }))}
+                  className={`w-full text-left p-4 rounded-md transition-all group ${state.selectedPaperId === paper.id ? 'bg-[#8b2e0f] text-white' : 'hover:bg-stone-200 text-stone-600'}`}
+                >
+                  <div className="font-['Space_Mono'] text-[0.55rem] uppercase tracking-widest mb-1 opacity-70">
+                    {paper.year}
+                  </div>
+                  <div className="font-['EB_Garamond'] text-sm italic font-medium leading-tight">
+                    {paper.title}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="h-px bg-stone-300 my-4" />
+
+            <div className="space-y-2">
+              <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2">The Load</h3>
+              <LoadManager />
+            </div>
           </div>
           <div className="p-6 border-t border-stone-300 bg-stone-100/50">
             <p className="font-['Space_Mono'] text-[0.5rem] uppercase tracking-widest text-stone-400">
@@ -350,14 +383,25 @@ export default function App() {
         </motion.div>
 
         {!state.sidebarOpen && (
-          <motion.button
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            onClick={() => setState(s => ({ ...s, sidebarOpen: true }))}
-            className="mt-6 ml-6 w-12 h-12 bg-white border border-stone-300 rounded-full shadow-lg flex items-center justify-center text-stone-600 hover:text-[#8b2e0f] hover:border-[#8b2e0f] transition-all pointer-events-auto group"
-          >
-            <BookOpen size={20} className="group-hover:scale-110 transition-transform" />
-          </motion.button>
+          <motion.div className="flex flex-col gap-4 mt-6 ml-6">
+            <motion.button
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              onClick={() => setState(s => ({ ...s, sidebarOpen: true }))}
+              className="w-12 h-12 bg-white border border-stone-300 rounded-full shadow-lg flex items-center justify-center text-stone-600 hover:text-[#8b2e0f] hover:border-[#8b2e0f] transition-all pointer-events-auto group"
+            >
+              <BookOpen size={20} className="group-hover:scale-110 transition-transform" />
+            </motion.button>
+            
+            <motion.div
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="pointer-events-auto"
+            >
+              <MiniMap distanceTraveled={state.distanceTraveled} totalDistance={510} />
+            </motion.div>
+          </motion.div>
         )}
       </div>
 
@@ -367,6 +411,10 @@ export default function App() {
       </div>
 
       <main className="relative w-full max-w-4xl bg-[#fffdfa] min-h-[85vh] shadow-[0_0_100px_rgba(0,0,0,0.5)] rounded-sm flex flex-col md:flex-row overflow-hidden">
+        {/* Paper Texture Overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-multiply" 
+          style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/paper-fibers.png")' }} />
+        
         {/* Book Spine / Left Margin */}
         <div className="hidden md:block w-16 bg-stone-100 border-r border-stone-200 relative">
           <div className="absolute inset-y-0 right-0 w-4 bg-gradient-to-r from-transparent to-black/5" />
@@ -412,22 +460,53 @@ export default function App() {
                 </div>
 
                 {/* Footnotes / Deep Dives */}
-                <div className="pt-8 border-t border-stone-100 space-y-6">
-                  <div className="flex items-center gap-3 text-[10px] italic text-stone-400 uppercase tracking-widest">
-                    <BookOpen size={14} />
-                    <span>Footnotes & Appendices</span>
+                <div className="pt-8 border-t border-stone-100 space-y-8">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 text-[10px] italic text-stone-400 uppercase tracking-widest">
+                      <BookOpen size={14} />
+                      <span>Footnotes & Appendices</span>
+                    </div>
+                    <div className="flex flex-wrap gap-4">
+                      {currentBeat.deepDives.map((dive: DeepDive) => (
+                        <button
+                          key={dive.id}
+                          onClick={() => setState(s => ({ ...s, activeDeepDive: dive }))}
+                          className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 transition-colors border-b border-stone-200 hover:border-stone-900 pb-1"
+                        >
+                          <span className="font-serif italic">[{dive.label}]</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-4">
-                    {currentBeat.deepDives.map((dive: DeepDive) => (
-                      <button
-                        key={dive.id}
-                        onClick={() => setState(s => ({ ...s, activeDeepDive: dive }))}
-                        className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 transition-colors border-b border-stone-200 hover:border-stone-900 pb-1"
-                      >
-                        <span className="font-serif italic">[{dive.label}]</span>
-                      </button>
-                    ))}
-                  </div>
+
+                  {currentBeat.relatedPaperIds && currentBeat.relatedPaperIds.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 text-[10px] italic text-stone-400 uppercase tracking-widest">
+                        <FileText size={14} />
+                        <span>Related Research</span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {currentBeat.relatedPaperIds.map(paperId => {
+                          const paper = PAPERS.find(p => p.id === paperId);
+                          if (!paper) return null;
+                          return (
+                            <button
+                              key={paperId}
+                              onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: paperId }))}
+                              className="group text-left p-4 bg-stone-50 border border-stone-200 rounded-sm hover:border-[#8b2e0f] transition-all"
+                            >
+                              <div className="font-['Space_Mono'] text-[0.5rem] uppercase tracking-widest text-stone-400 mb-1">
+                                {paper.year} · {paper.id}
+                              </div>
+                              <div className="font-serif italic text-sm text-stone-700 group-hover:text-[#8b2e0f] transition-colors">
+                                {paper.title}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Marginalia */}
