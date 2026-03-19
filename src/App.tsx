@@ -27,6 +27,7 @@ import AcademicPaper from './components/AcademicPaper.tsx';
 import MiniMap from './components/MiniMap.tsx';
 import LoadManager from './components/LoadManager.tsx';
 import { Marginalia } from './components/Marginalia.tsx';
+import { RouteMap } from './components/RouteMap';
 import { PAPERS } from './data/papers';
 import { formatText } from './utils/textFormatting';
 
@@ -34,7 +35,7 @@ import { formatText } from './utils/textFormatting';
 
 type SceneId = 'prologue' | 'chapter-1' | 'chapter-2' | 'chapter-3' | 'chapter-4' | 'chapter-5' | 'chapter-6' | 'epilogue' | 'academic-paper';
 
-interface DeepDive {
+export interface DeepDive {
   id: string;
   label: string;
   content: string;
@@ -557,7 +558,12 @@ export default function App() {
                   } first-letter:text-6xl first-letter:font-bold first-letter:mr-3 first-letter:float-left first-letter:transition-colors first-letter:duration-700 ${
                     state.readingMode === 'day' ? 'first-letter:text-stone-900' : 'first-letter:text-[#8b2e0f]'
                   }`}>
-                    {formatText(currentBeat.text, (id) => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: id })))}
+                    {formatText(
+                      currentBeat.text, 
+                      (id) => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: id })),
+                      (dive) => setState(s => ({ ...s, activeDeepDive: dive })),
+                      currentBeat.deepDives
+                    )}
                   </p>
                 </div>
 
@@ -616,6 +622,8 @@ export default function App() {
                   text={currentBeat.marginalia} 
                   progress={state.vibeShift} 
                   onNavigate={(id) => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: id }))}
+                  onDeepDive={(dive) => setState(s => ({ ...s, activeDeepDive: dive }))}
+                  deepDives={currentBeat.deepDives}
                 />
 
                 {/* Page Turn Button */}
@@ -689,7 +697,12 @@ export default function App() {
               <div className="relative">
                 <Quote className="absolute -left-8 -top-4 text-stone-100 w-16 h-16 -z-10" />
                 <p className="text-stone-800 leading-relaxed font-serif text-xl italic">
-                  {formatText(state.activeDeepDive.content, (id) => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: id, activeDeepDive: null })))}
+                  {formatText(
+                    state.activeDeepDive.content, 
+                    (id) => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: id, activeDeepDive: null })),
+                    (dive) => setState(s => ({ ...s, activeDeepDive: dive })),
+                    currentBeat.deepDives
+                  )}
                 </p>
               </div>
 
@@ -741,7 +754,9 @@ export default function App() {
             <AcademicPaper 
               selectedPaperId={state.selectedPaperId}
               onSelectPaper={(id) => setState(s => ({ ...s, selectedPaperId: id }))}
-              onBack={() => setState(s => ({ ...s, scene: 'prologue', selectedPaperId: null }))} 
+              onBack={() => setState(s => ({ ...s, scene: 'story', selectedPaperId: null }))}
+              onDeepDive={(dive) => setState(s => ({ ...s, activeDeepDive: dive }))}
+              deepDives={currentBeat.deepDives}
             />
           </div>
         )}

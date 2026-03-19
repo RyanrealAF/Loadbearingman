@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, BookOpen } from 'lucide-react';
 import { PAPERS } from '../data/papers';
+import { DeepDive } from '../App';
 
 export const GLOSSARY: Record<string, string> = {
   'folk devil': 'A person or group of people portrayed in folklore or the media as outsiders and deviant, and who are blamed for crimes or other social problems.',
@@ -153,16 +154,39 @@ export const GlossaryTerm = ({ term, children, onNavigate }: { term: string, chi
   );
 };
 
-export const formatText = (text: string, onNavigate: (id: string) => void) => {
+export const DeepDiveLink = ({ dive, onDeepDive, key }: { dive: DeepDive, onDeepDive: (dive: DeepDive) => void, key?: string }) => {
+  return (
+    <button
+      key={key}
+      onClick={(e) => {
+        e.stopPropagation();
+        onDeepDive(dive);
+      }}
+      className="inline-flex items-center gap-1 text-[#b89a4e] hover:text-[#8b2e0f] font-serif italic border-b border-[#b89a4e]/30 hover:border-[#8b2e0f] transition-all group"
+    >
+      {dive.label}
+      <BookOpen size={10} className="opacity-40 group-hover:opacity-100 transition-opacity" />
+    </button>
+  );
+};
+
+export const formatText = (
+  text: string, 
+  onNavigate: (id: string) => void, 
+  onDeepDive?: (dive: DeepDive) => void,
+  deepDives?: DeepDive[]
+) => {
   const allTerms = [
     ...Object.keys(LIBRARY_LINKS).map(term => ({ term, type: 'library' as const })),
-    ...Object.keys(GLOSSARY).map(term => ({ term, type: 'glossary' as const }))
+    ...Object.keys(GLOSSARY).map(term => ({ term, type: 'glossary' as const })),
+    ...(deepDives || []).map(dive => ({ term: dive.label, type: 'deep-dive' as const, dive }))
   ].sort((a, b) => b.term.length - a.term.length);
 
   let formatted: (string | React.ReactNode)[] = [text];
   const processedTerms = new Set<string>();
 
-  allTerms.forEach(({ term, type }) => {
+  allTerms.forEach((item) => {
+    const { term, type } = item;
     if (processedTerms.has(term.toLowerCase())) return;
     processedTerms.add(term.toLowerCase());
 
@@ -180,6 +204,8 @@ export const formatText = (text: string, onNavigate: (id: string) => void) => {
               } else {
                 newFormatted.push(s);
               }
+            } else if (type === 'deep-dive' && onDeepDive && 'dive' in item) {
+              newFormatted.push(<DeepDiveLink key={s + i} dive={item.dive as DeepDive} onDeepDive={onDeepDive} />);
             } else {
               newFormatted.push(<GlossaryTerm key={s + i} term={s} onNavigate={onNavigate}>{s}</GlossaryTerm>);
             }
