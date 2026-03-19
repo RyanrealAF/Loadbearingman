@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Copy, Check } from 'lucide-react';
 import { PAPERS, AcademicPaperData } from '../data/papers';
+import { formatText } from '../utils/textFormatting';
 
 interface AcademicPaperProps {
   onBack: () => void;
@@ -120,15 +121,15 @@ const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, 
       {/* ---- ABSTRACT ---- */}
       <div className="border border-[#c9bfb3] border-l-[3px] border-l-[#b89a4e] bg-[#b89a4e]/[0.04] px-7 py-6 mb-13">
         <div className="font-['Space_Mono',_monospace] text-[0.58rem] tracking-[0.2em] uppercase text-[#b89a4e] mb-3">Abstract</div>
-        <p className="text-[0.95rem] leading-[1.75] text-[#6b6560] italic mb-6">
-          {paper.abstract}
-        </p>
+        <div className="text-[0.95rem] leading-[1.75] text-[#6b6560] italic mb-6">
+          {formatText(paper.abstract, onSelectPaper)}
+        </div>
         {paper.authorNote && (
           <div className="pt-6 border-t border-[#c9bfb3]/50">
             <div className="font-['Space_Mono',_monospace] text-[0.58rem] tracking-[0.2em] uppercase text-[#b89a4e] mb-3">Author Note</div>
-            <p className="text-[0.85rem] leading-[1.6] text-[#6b6560] italic">
-              {paper.authorNote}
-            </p>
+            <div className="text-[0.85rem] leading-[1.6] text-[#6b6560] italic">
+              {formatText(paper.authorNote, onSelectPaper)}
+            </div>
           </div>
         )}
       </div>
@@ -142,7 +143,7 @@ const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, 
           </div>
           <div className="text-[1.05rem] leading-[1.82] text-[#0e0c0a] text-justify hyphens-auto space-y-4.5">
             {section.content.map((para, pIdx) => (
-              <p key={pIdx}>{para}</p>
+              <p key={pIdx}>{formatText(para, onSelectPaper)}</p>
             ))}
           </div>
           {idx < paper.sections.length - 1 && (

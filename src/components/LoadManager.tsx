@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Weight, Package, Shield, Coffee, Book, Activity, Layers } from 'lucide-react';
 
 interface LoadItem {
@@ -8,23 +8,25 @@ interface LoadItem {
   weight: number;
   category: 'survival' | 'protection' | 'utility' | 'knowledge';
   icon: React.ReactNode;
+  description: string;
 }
 
 const LOAD_ITEMS: LoadItem[] = [
-  { id: 'tarp', name: 'Heavy Duty Tarp', weight: 4, category: 'survival', icon: <Shield size={14} /> },
-  { id: 'sleeping-bag', name: '0° Sleeping Bag', weight: 6, category: 'survival', icon: <Package size={14} /> },
-  { id: 'water', name: '3L Water', weight: 6.6, category: 'survival', icon: <Activity size={14} /> },
-  { id: 'stove', name: 'Jetboil + Fuel', weight: 2, category: 'utility', icon: <Coffee size={14} /> },
-  { id: 'notebooks', name: 'Field Notebooks (4)', weight: 3, category: 'knowledge', icon: <Book size={14} /> },
-  { id: 'laptop', name: 'Rugged Laptop + Solar', weight: 5, category: 'knowledge', icon: <Layers size={14} /> },
-  { id: 'clothing', name: 'Layered Clothing', weight: 4.4, category: 'protection', icon: <Shield size={14} /> },
+  { id: 'tarp', name: 'Heavy Duty Tarp', weight: 4, category: 'survival', icon: <Shield size={14} />, description: "A structural anchor. Protection from the elements and the unobserved." },
+  { id: 'sleeping-bag', name: '0° Sleeping Bag', weight: 6, category: 'survival', icon: <Package size={14} />, description: "The difference between a night and an ordeal." },
+  { id: 'water', name: '3L Water', weight: 6.6, category: 'survival', icon: <Activity size={14} />, description: "The most basic overhead of existence." },
+  { id: 'stove', name: 'Jetboil + Fuel', weight: 2, category: 'utility', icon: <Coffee size={14} />, description: "Warmth is a psychological asset as much as a physical one." },
+  { id: 'notebooks', name: 'Field Notebooks (4)', weight: 3, category: 'knowledge', icon: <Book size={14} />, description: "Testimony. The unvarnished record of the machine." },
+  { id: 'laptop', name: 'Rugged Laptop + Solar', weight: 5, category: 'knowledge', icon: <Layers size={14} />, description: "The infrastructure of formal theory. Building while bleeding." },
+  { id: 'clothing', name: 'Layered Clothing', weight: 4.4, category: 'protection', icon: <Shield size={14} />, description: "The first layer of defense against the social tax." },
 ];
 
 const LoadManager: React.FC = () => {
+  const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
   const totalWeight = LOAD_ITEMS.reduce((sum, item) => sum + item.weight, 0);
   
   return (
-    <div className="p-6 bg-stone-50 border border-stone-200 rounded-sm space-y-6">
+    <div className="p-6 bg-stone-50 border border-stone-200 rounded-sm space-y-6 relative">
       <div className="flex items-center justify-between border-b border-stone-200 pb-4">
         <div className="flex items-center gap-3 text-[#8b2e0f]">
           <Weight size={18} />
@@ -33,14 +35,16 @@ const LoadManager: React.FC = () => {
         <span className="font-mono text-sm font-bold text-stone-600">{totalWeight.toFixed(1)} lbs</span>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 relative">
         {LOAD_ITEMS.map((item, index) => (
           <motion.div 
             key={item.id}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="flex items-center justify-between group"
+            onMouseEnter={() => setHoveredItem(item.id)}
+            onMouseLeave={() => setHoveredItem(null)}
+            className="flex items-center justify-between group cursor-help"
           >
             <div className="flex items-center gap-3">
               <div className="text-stone-400 group-hover:text-[#8b2e0f] transition-colors">
@@ -51,6 +55,19 @@ const LoadManager: React.FC = () => {
             <span className="font-mono text-[10px] text-stone-400">{item.weight} lbs</span>
           </motion.div>
         ))}
+
+        <AnimatePresence>
+          {hoveredItem && (
+            <motion.div
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 5 }}
+              className="absolute left-0 right-0 -bottom-12 bg-stone-900 text-white p-3 rounded text-[10px] font-serif italic z-10 shadow-xl"
+            >
+              {LOAD_ITEMS.find(i => i.id === hoveredItem)?.description}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="pt-4 border-t border-stone-200">
