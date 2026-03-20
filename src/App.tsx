@@ -24,10 +24,8 @@ import {
 } from 'lucide-react';
 
 import AcademicPaper from './components/AcademicPaper.tsx';
-import MiniMap from './components/MiniMap.tsx';
 import LoadManager from './components/LoadManager.tsx';
 import { Marginalia } from './components/Marginalia.tsx';
-import { RouteMap } from './components/RouteMap';
 import { PAPERS } from './data/papers';
 import { formatText } from './utils/textFormatting';
 
@@ -332,6 +330,156 @@ export default function App() {
 
   return (
     <div className={`min-h-screen transition-colors duration-700 flex items-center justify-center p-4 md:p-8 font-serif selection:bg-stone-200 selection:text-stone-900 ${state.readingMode === 'day' ? 'bg-stone-950' : 'bg-stone-900'}`}>
+      {/* SVG Filters */}
+      <svg className="hidden">
+        <filter id="noiseFilter">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" />
+          <feComposite operator="in" in2="SourceGraphic" />
+        </filter>
+      </svg>
+
+      {/* Sidebar Toggle */}
+      <div className="fixed top-8 left-8 z-[100]">
+        <button
+          onClick={() => setState(s => ({ ...s, sidebarOpen: !s.sidebarOpen }))}
+          className={`p-4 rounded-full border transition-all flex items-center justify-center shadow-2xl group ${
+            state.readingMode === 'day' 
+              ? 'bg-white border-stone-200 text-[#8b2e0f] hover:bg-stone-50' 
+              : 'bg-stone-800 border-stone-700 text-[#b89a4e] hover:bg-stone-700'
+          }`}
+        >
+          <BookOpen size={24} className="group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
+
+      {/* Sidebar Overlay */}
+      <AnimatePresence>
+        {state.sidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setState(s => ({ ...s, sidebarOpen: false }))}
+              className="fixed inset-0 bg-stone-950/60 backdrop-blur-sm z-[80]"
+            />
+            <motion.div 
+              initial={{ x: -320 }}
+              animate={{ x: 0 }}
+              exit={{ x: -320 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className={`fixed top-0 left-0 bottom-0 w-[320px] z-[90] border-r transition-colors duration-700 flex flex-col shadow-2xl overflow-hidden ${
+                state.readingMode === 'day' ? 'bg-[#f0ebe2] border-stone-200' : 'bg-[#141210] border-stone-800'
+              }`}
+            >
+              <div className={`p-8 border-b flex items-center justify-between transition-colors duration-700 ${
+                state.readingMode === 'day' ? 'border-stone-300' : 'border-stone-800'
+              }`}>
+                <div className="space-y-1">
+                  <h2 className={`font-['Bebas_Neue'] text-3xl tracking-wider transition-colors duration-700 ${
+                    state.readingMode === 'day' ? 'text-[#8b2e0f]' : 'text-[#b89a4e]'
+                  }`}>Research Library</h2>
+                  <p className="font-mono text-[8px] uppercase tracking-widest text-stone-400">The Folk Devil Series</p>
+                </div>
+                <button 
+                  onClick={() => setState(s => ({ ...s, sidebarOpen: false }))}
+                  className="p-2 hover:bg-stone-500/10 rounded-full transition-colors"
+                >
+                  <X size={20} className="text-stone-400" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
+                <div className="space-y-3">
+                  <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2 border-b border-stone-300/20 pb-1">Chapters</h3>
+                  <div className="space-y-1">
+                    {Object.keys(STORY_BEATS).filter(key => key !== 'academic-paper').map(key => (
+                      <button
+                        key={key}
+                        onClick={() => setState(s => ({ ...s, scene: key as SceneId, sidebarOpen: false }))}
+                        className={`w-full text-left p-3 rounded-md transition-all font-serif italic text-sm flex items-center justify-between group ${
+                          state.scene === key 
+                            ? (state.readingMode === 'day' ? 'bg-[#8b2e0f] text-white' : 'bg-[#b89a4e] text-stone-900') 
+                            : (state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600' : 'hover:bg-stone-800 text-stone-400')
+                        }`}
+                      >
+                        <span>{STORY_BEATS[key as SceneId].title}</span>
+                        {state.scene === key && <ChevronRight size={14} />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2 border-b border-stone-300/20 pb-1">Vibe Shift</h3>
+                  <div className="px-2 space-y-3">
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      value={state.vibeShift}
+                      onChange={(e) => setState(s => ({ ...s, vibeShift: parseInt(e.target.value) }))}
+                      className="w-full h-1 bg-stone-300 rounded-lg appearance-none cursor-pointer accent-[#8b2e0f]"
+                    />
+                    <div className="flex justify-between font-mono text-[8px] uppercase tracking-tighter text-stone-400">
+                      <span>Clear</span>
+                      <span>{state.vibeShift}%</span>
+                      <span>Smeared</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2 border-b border-stone-300/20 pb-1">Research Papers</h3>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: null, sidebarOpen: false }))}
+                      className={`w-full text-left p-4 rounded-md transition-all font-['Space_Mono'] text-[0.65rem] uppercase tracking-wider border border-transparent ${
+                        !state.selectedPaperId && state.scene === 'academic-paper' 
+                          ? (state.readingMode === 'day' ? 'bg-[#8b2e0f] text-white' : 'bg-[#b89a4e] text-stone-900') 
+                          : (state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600 border-stone-200' : 'hover:bg-stone-800 text-stone-400 border-stone-700')
+                      }`}
+                    >
+                      Library Overview
+                    </button>
+                    {PAPERS.map(paper => (
+                      <button
+                        key={paper.id}
+                        onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: paper.id, sidebarOpen: false }))}
+                        className={`w-full text-left p-4 rounded-md transition-all group border border-transparent ${
+                          state.selectedPaperId === paper.id 
+                            ? (state.readingMode === 'day' ? 'bg-[#8b2e0f] text-white' : 'bg-[#b89a4e] text-stone-900') 
+                            : (state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600 border-stone-200' : 'hover:bg-stone-800 text-stone-400 border-stone-700')
+                        }`}
+                      >
+                        <div className="font-['Space_Mono'] text-[0.55rem] uppercase tracking-widest mb-1 opacity-70">
+                          {paper.year} · {paper.id}
+                        </div>
+                        <div className="font-['EB_Garamond'] text-sm italic font-medium leading-tight">
+                          {paper.title}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2 border-b border-stone-300/20 pb-1">The Load</h3>
+                  <LoadManager />
+                </div>
+              </div>
+              <div className={`p-8 border-t transition-colors duration-700 ${
+                state.readingMode === 'day' ? 'border-stone-300 bg-stone-100/50' : 'border-stone-800 bg-stone-900/50'
+              }`}>
+                <p className="font-['Space_Mono'] text-[0.5rem] uppercase tracking-widest text-stone-400">
+                  Copyright © 2026 Ethnographic Press
+                </p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Reading Mode Toggle */}
       <div className="fixed top-8 right-8 z-[80] flex items-center gap-4">
         <button
@@ -344,130 +492,6 @@ export default function App() {
         >
           {state.readingMode === 'day' ? 'Reading Light: On' : 'Reading Light: Off'}
         </button>
-      </div>
-
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 bottom-0 z-[70] flex pointer-events-none">
-        <motion.div
-          initial={false}
-          animate={{ x: state.sidebarOpen ? 0 : -320 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className={`w-80 border-r shadow-2xl pointer-events-auto flex flex-col transition-colors duration-700 ${
-            state.readingMode === 'day' ? 'bg-[#f0ebe2] border-stone-300' : 'bg-[#141210] border-stone-800'
-          }`}
-        >
-          <div className={`p-6 border-b flex items-center justify-between transition-colors duration-700 ${
-            state.readingMode === 'day' ? 'border-stone-300' : 'border-stone-800'
-          }`}>
-            <h2 className={`font-['Bebas_Neue'] text-2xl tracking-wider transition-colors duration-700 ${
-              state.readingMode === 'day' ? 'text-[#8b2e0f]' : 'text-[#b89a4e]'
-            }`}>Research Library</h2>
-            <button 
-              onClick={() => setState(s => ({ ...s, sidebarOpen: false }))}
-              className={`p-2 rounded-full transition-colors ${
-                state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600' : 'hover:bg-stone-800 text-stone-400'
-              }`}
-            >
-              <ChevronLeft size={20} />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
-            <div className="space-y-2">
-              <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2">Chapters</h3>
-              {Object.keys(STORY_BEATS).filter(key => key !== 'academic-paper').map(key => (
-                <button
-                  key={key}
-                  onClick={() => setState(s => ({ ...s, scene: key as SceneId, sidebarOpen: false }))}
-                  className={`w-full text-left p-2 rounded-md transition-all font-serif italic text-sm ${
-                    state.scene === key 
-                      ? (state.readingMode === 'day' ? 'bg-[#8b2e0f] text-white' : 'bg-[#b89a4e] text-stone-900') 
-                      : (state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600' : 'hover:bg-stone-800 text-stone-400')
-                  }`}
-                >
-                  {STORY_BEATS[key as SceneId].title}
-                </button>
-              ))}
-            </div>
-
-            <div className={`h-px my-4 transition-colors duration-700 ${
-              state.readingMode === 'day' ? 'bg-stone-300' : 'bg-stone-800'
-            }`} />
-
-            <div className="space-y-2">
-              <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2">Research Papers</h3>
-              <button
-                onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: null, sidebarOpen: false }))}
-                className={`w-full text-left p-4 rounded-md transition-all font-['Space_Mono'] text-[0.65rem] uppercase tracking-wider ${
-                  !state.selectedPaperId && state.scene === 'academic-paper' 
-                    ? (state.readingMode === 'day' ? 'bg-[#8b2e0f] text-white' : 'bg-[#b89a4e] text-stone-900') 
-                    : (state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600' : 'hover:bg-stone-800 text-stone-400')
-                }`}
-              >
-                Library Overview
-              </button>
-              {PAPERS.map(paper => (
-                <button
-                  key={paper.id}
-                  onClick={() => setState(s => ({ ...s, scene: 'academic-paper', selectedPaperId: paper.id, sidebarOpen: false }))}
-                  className={`w-full text-left p-4 rounded-md transition-all group ${
-                    state.selectedPaperId === paper.id 
-                      ? (state.readingMode === 'day' ? 'bg-[#8b2e0f] text-white' : 'bg-[#b89a4e] text-stone-900') 
-                      : (state.readingMode === 'day' ? 'hover:bg-stone-200 text-stone-600' : 'hover:bg-stone-800 text-stone-400')
-                  }`}
-                >
-                  <div className="font-['Space_Mono'] text-[0.55rem] uppercase tracking-widest mb-1 opacity-70">
-                    {paper.year}
-                  </div>
-                  <div className="font-['EB_Garamond'] text-sm italic font-medium leading-tight">
-                    {paper.title}
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className={`h-px my-4 transition-colors duration-700 ${
-              state.readingMode === 'day' ? 'bg-stone-300' : 'bg-stone-800'
-            }`} />
-
-            <div className="space-y-2">
-              <h3 className="font-['Space_Mono'] text-[0.65rem] uppercase tracking-widest text-stone-400 mb-2">The Load</h3>
-              <LoadManager />
-            </div>
-          </div>
-          <div className={`p-6 border-t transition-colors duration-700 ${
-            state.readingMode === 'day' ? 'border-stone-300 bg-stone-100/50' : 'border-stone-800 bg-stone-900/50'
-          }`}>
-            <p className="font-['Space_Mono'] text-[0.5rem] uppercase tracking-widest text-stone-400">
-              Street-Level Studies · Vol. I
-            </p>
-          </div>
-        </motion.div>
-
-        {!state.sidebarOpen && (
-          <motion.div className="flex flex-col gap-4 mt-6 ml-6">
-            <motion.button
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              onClick={() => setState(s => ({ ...s, sidebarOpen: true }))}
-              className={`w-12 h-12 border rounded-full shadow-lg flex items-center justify-center transition-all pointer-events-auto group ${
-                state.readingMode === 'day' 
-                  ? 'bg-white border-stone-300 text-stone-600 hover:text-[#8b2e0f] hover:border-[#8b2e0f]' 
-                  : 'bg-stone-800 border-stone-700 text-stone-400 hover:text-[#b89a4e] hover:border-[#b89a4e]'
-              }`}
-            >
-              <BookOpen size={20} className="group-hover:scale-110 transition-transform" />
-            </motion.button>
-            
-            <motion.div
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="pointer-events-auto"
-            >
-              <MiniMap distanceTraveled={state.distanceTraveled} totalDistance={510} />
-            </motion.div>
-          </motion.div>
-        )}
       </div>
 
       {/* Background Atmosphere */}
@@ -497,29 +521,32 @@ export default function App() {
         style={{ scaleX }}
       />
 
-      <main className={`relative w-full max-w-4xl min-h-[85vh] shadow-[0_0_100px_rgba(0,0,0,0.5)] rounded-sm flex flex-col md:flex-row overflow-hidden transition-colors duration-700 ${
+      <main className={`relative w-full max-w-6xl min-h-[85vh] shadow-[0_0_100px_rgba(0,0,0,0.5)] rounded-sm transition-all duration-700 ${
         state.readingMode === 'day' ? 'bg-[#fffdfa]' : 'bg-[#1a1816]'
       }`}>
         {/* Paper Texture Overlay */}
-        <div className={`absolute inset-0 pointer-events-none mix-blend-multiply transition-opacity duration-700 ${
+        <div className={`absolute inset-0 pointer-events-none mix-blend-multiply transition-opacity duration-700 z-10 ${
           state.readingMode === 'day' ? 'opacity-[0.03]' : 'opacity-[0.01]'
         }`} 
           style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/paper-fibers.png")' }} />
         
-        {/* Book Spine / Left Margin */}
-        <div className={`hidden md:block w-16 border-r transition-colors duration-700 relative ${
-          state.readingMode === 'day' ? 'bg-stone-100 border-stone-200' : 'bg-[#141210] border-stone-800'
-        }`}>
-          <div className="absolute inset-y-0 right-0 w-4 bg-gradient-to-r from-transparent to-black/5" />
-          <div className="absolute top-12 left-1/2 -translate-x-1/2 [writing-mode:vertical-rl] rotate-180 text-[10px] font-serif italic text-stone-400 tracking-[0.3em] uppercase">
-            The Load-Bearing Man
-          </div>
-        </div>
-
         {/* Page Content */}
-        <div className={`flex-grow flex flex-col p-8 md:p-16 relative transition-colors duration-700 ${
-          state.readingMode === 'day' ? 'text-stone-900' : 'text-stone-300'
-        }`}>
+        <div 
+          className={`flex-grow flex flex-col p-8 md:p-16 relative transition-all duration-700 ${
+            state.readingMode === 'day' ? 'text-stone-900' : 'text-stone-300'
+          }`}
+          style={{
+            filter: `grayscale(${state.vibeShift / 100}) contrast(${1 + state.vibeShift / 200}) sepia(${state.vibeShift / 300}) brightness(${1 - state.vibeShift / 400}) blur(${state.vibeShift / 50}px)`
+          }}
+        >
+          {/* Noise Overlay */}
+          <div 
+            className="absolute inset-0 pointer-events-none z-20 mix-blend-overlay opacity-[0.05]"
+            style={{ 
+              filter: `url(#noiseFilter)`,
+              opacity: state.vibeShift / 1000 + 0.02
+            }} 
+          />
           {/* Header */}
           <header className="mb-12">
             <PageInfo miles={state.distanceTraveled} load={state.load} scene={state.scene} readingTime={readingTime} />
