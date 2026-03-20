@@ -340,7 +340,7 @@ export default function App() {
       </svg>
 
       {/* Sidebar Toggle */}
-      <div className="fixed top-8 left-8 z-[100]">
+      <div className="fixed bottom-8 left-8 z-[70]">
         <button
           onClick={() => setState(s => ({ ...s, sidebarOpen: !s.sidebarOpen }))}
           className={`p-4 rounded-full border transition-all flex items-center justify-center shadow-2xl group ${
@@ -481,7 +481,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* Reading Mode Toggle */}
-      <div className="fixed top-8 right-8 z-[80] flex items-center gap-4">
+      <div className="fixed top-8 right-8 z-[100] flex items-center gap-4">
         <button
           onClick={() => setState(s => ({ ...s, readingMode: s.readingMode === 'day' ? 'night' : 'day' }))}
           className={`px-4 py-2 rounded-full border transition-all flex items-center gap-2 text-[10px] uppercase tracking-widest font-mono ${
