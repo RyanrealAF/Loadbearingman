@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">The Load-Bearing Man</string>
-    <string name="title_activity_main">The Load-Bearing Man</string>
-    <string name="package_name">com.theloadbearingman.app</string>
-    <string name="custom_url_scheme">com.theloadbearingman.app</string>
-</resources>
