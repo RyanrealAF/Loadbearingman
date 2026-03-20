@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Copy, Check } from 'lucide-react';
 import { PAPERS, AcademicPaperData } from '../data/papers';
-import { formatText } from '../utils/textFormatting';
+import { formatText } from '../utils/textFormatting.tsx';
 
 interface AcademicPaperProps {
   onBack: () => void;
