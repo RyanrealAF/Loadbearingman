@@ -101,7 +101,7 @@ export const PAPERS: AcademicPaperData[] = [
       }
     ],
     references: [
-      "Borland, R. (2025). Build While Bleeding. buildwhilebleeding.com"
+      "Borland, R. (2025). Build While Bleeding. [buildwhilebleeding.com](https://buildwhilebleeding.com)"
     ]
   },
   {
@@ -168,10 +168,10 @@ export const PAPERS: AcademicPaperData[] = [
       }
     ],
     references: [
-      "Cohen, S. (1972). Folk devils and moral panics.",
-      "Durkheim, É. (1893). The division of labour in society.",
-      "Fischer, A., et al. (2018). Why group-based emotions trigger intergroup aggression: Examining the role of the ANCODI complex.",
-      "Goode, E., & Ben-Yehuda, N. (1994). Moral panics: The social construction of deviance."
+      "Cohen, S. (1972). [Folk devils and moral panics](https://en.wikipedia.org/wiki/Folk_devils_and_moral_panics).",
+      "Durkheim, É. (1893). [The division of labour in society](https://en.wikipedia.org/wiki/The_Division_of_Labour_in_Society).",
+      "Fischer, A., et al. (2018). [Why group-based emotions trigger intergroup aggression: Examining the role of the ANCODI complex](https://pubmed.ncbi.nlm.nih.gov/29355353/).",
+      "Goode, E., & Ben-Yehuda, N. (1994). [Moral panics: The social construction of deviance](https://en.wikipedia.org/wiki/Moral_panic)."
     ]
   },
   {
@@ -222,11 +222,11 @@ export const PAPERS: AcademicPaperData[] = [
       }
     ],
     references: [
-      "Adickes v. S.H. Kress & Co., 398 U.S. 144 (1970).",
-      "Herman, J. L. (1992). Trauma and recovery.",
-      "Monell v. Department of Social Services, 436 U.S. 658 (1978).",
-      "Paul v. Davis, 424 U.S. 693 (1976).",
-      "Seligman, M. E. P. (1975). Helplessness."
+      "[Adickes v. S.H. Kress & Co., 398 U.S. 144 (1970)](https://supreme.justia.com/cases/federal/us/398/144/).",
+      "Herman, J. L. (1992). [Trauma and recovery](https://en.wikipedia.org/wiki/Trauma_and_Recovery).",
+      "[Monell v. Department of Social Services, 436 U.S. 658 (1978)](https://supreme.justia.com/cases/federal/us/436/658/).",
+      "[Paul v. Davis, 424 U.S. 693 (1976)](https://supreme.justia.com/cases/federal/us/424/693/).",
+      "Seligman, M. E. P. (1975). [Helplessness](https://en.wikipedia.org/wiki/Learned_helplessness)."
     ]
   },
   {
@@ -282,11 +282,78 @@ export const PAPERS: AcademicPaperData[] = [
       }
     ],
     references: [
-      "Adickes v. S.H. Kress & Co., 398 U.S. 144 (1970).",
-      "Cohen, S. (1972). Folk devils and moral panics.",
-      "Durkheim, É. (1893). The division of labour in society.",
-      "Herman, J. L. (1992). Trauma and recovery.",
-      "Seligman, M. E. P. (1975). Helplessness."
+      "[Adickes v. S.H. Kress & Co., 398 U.S. 144 (1970)](https://supreme.justia.com/cases/federal/us/398/144/).",
+      "Cohen, S. (1972). [Folk devils and moral panics](https://en.wikipedia.org/wiki/Folk_devils_and_moral_panics).",
+      "Durkheim, É. (1893). [The division of labour in society](https://en.wikipedia.org/wiki/The_Division_of_Labour_in_Society).",
+      "Herman, J. L. (1992). [Trauma and recovery](https://en.wikipedia.org/wiki/Trauma_and_Recovery).",
+      "Seligman, M. E. P. (1975). [Helplessness](https://en.wikipedia.org/wiki/Learned_helplessness)."
+    ]
+  },
+  {
+    id: 'harassment-architecture',
+    title: "The Psychological Architecture of Prolonged Coordinated Harassment",
+    subtitle: "A Case Study in Covert Destabilization",
+    author: "Ryan Borland",
+    domain: "buildwhilebleeding.com",
+    contact: "purarecoveryryan@gmail.com",
+    year: "2026",
+    abstract: "This briefing presents a documented account of the psychological effects produced by a multi-year coordinated campaign of social, institutional, and digital harassment directed against a single U.S. civilian. The subject - Ryan Borland, an independent digital content creator, writer, and journalist - has been the target of an escalating operation spanning more than three years across multiple California jurisdictions. What follows is not speculation. It is a forensic account derived from primary documentation, first-person testimony, and analysis grounded in established clinical and civil rights frameworks. The purpose of this briefing is to inform media, legal observers, and the public about what these campaigns actually do to a human being - psychologically, socially, and constitutionally.",
+    sections: [
+      {
+        id: 'the-subject',
+        title: "The Subject",
+        content: [
+          "Ryan Borland is not an easy target by any conventional measure. His background includes three prison terms, which he converted into a period of intellectual development - tutoring GED and math students inside correctional facilities with results that outperformed credentialed instructors. Outside of incarceration, he consistently rose to supervisory roles. His analytical capabilities, strategic self-reliance, and high tolerance for adversity were not incidental traits - they were forged under extreme conditions over decades.",
+          "Understanding this is essential context. The campaign documented here was not effective because the subject was fragile. It was effective because it was engineered to exploit the specific vulnerabilities created by housing instability - a condition manufactured and maintained, in part, by the campaign itself."
+        ]
+      },
+      {
+        id: 'campaign-mechanics',
+        title: "What the Campaign Did",
+        content: [
+          "The operation proceeded in overlapping stages. First, old information - a sexual offense from two decades prior - was extracted and circulated through local gossip networks to seed suspicion before the subject could establish himself in a new environment. Once that atmospheric contamination was in place, ordinary behaviors were recontextualized as threats. Charging a phone at a public outlet became \"suspicious loitering.\" Routine social interactions became \"stalking.\" A content creator working on his laptop became, in the constructed narrative, someone dangerous.",
+          "This is the first and most important psychological mechanism to understand: the campaign did not need to fabricate dramatic events. It needed only to poison the interpretive frame through which every real event would be processed. From that foundation, the operation expanded outward. Community members became unwitting enforcement agents, reacting to pre-planted perceptions rather than direct observation. Businesses excluded the subject based on secondhand accounts. Coordinated platform reporting suppressed his digital content - the primary instrument of his professional livelihood and his mechanism for counter-narrative. Law enforcement was weaponized through fabricated or exaggerated reports. The result was a subject who had been effectively surrounded - socially, institutionally, and digitally - with no reliable avenue of recourse."
+        ]
+      },
+      {
+        id: 'psychological-damage',
+        title: "The Psychological Damage Profile",
+        content: [
+          "The psychological harm inflicted by this campaign does not fit the standard trauma model built around discrete, bounded events. It is more accurately characterized as complex PTSD - the clinical profile produced not by a single catastrophic incident but by prolonged, inescapable, multi-directional threat with no available recovery environment. Every potential zone of safety was systematically contaminated. Social relationships were converted into surveillance assets. Physical spaces became exclusion zones. Institutions that are supposed to provide recourse were turned into additional vectors of harm.",
+          "1. Hypervigilance as Weaponized Accurate Perception: The first and most clinically significant effect was the development of hypervigilance - a state of heightened, near-continuous environmental scanning for threat signals. The cruel irony documented in Ryan's case is that his hypervigilance was accurate. His nervous system was not stuck in a past threat; it was correctly reading a present one. But the campaign exploited this by framing his accurate threat perception as evidence of instability - manufacturing the appearance of a man unraveling, while engineering the conditions that justified his alarm.",
+          "2. Acquired Helplessness and Motivational Paralysis: The second major psychological effect was what clinical frameworks describe as acquired helplessness - the systematic disruption of the relationship between effort and outcome. When honest behavior is punished, when documentation is dismissed, when good-faith action consistently produces negative consequences, the motivational architecture that sustains forward movement erodes. Ryan has described this state directly: treading water in an open sea with the ship sunk, questioning what there is to swim toward. This is not a metaphor for weakness. It is a precise description of what happens to a person whose environment has been rigged to invert the consequences of competence.",
+          "3. Narrative Dispossession and Identity Dissolution: The third and deepest harm is what this documentation terms narrative dispossession - the forcible replacement of a self-authored identity with an adversarially constructed one. Ryan Borland, content creator, strategist, and writer, was systematically converted in the public-facing narrative into a loiterer, a threat, a predator. Identity is not purely internal - it is maintained through the social recognition of others and the coherence between one's actions and their consequences. When those consequences are inverted - when returning with receipts and correct change produces fury rather than resolution - the subject loses not merely reputation but the social conditions necessary to maintain a coherent sense of self."
+        ]
+      },
+      {
+        id: 'constitutional-dimension',
+        title: "The Constitutional Dimension",
+        content: [
+          "The psychological effects cannot be separated from their civil liberties dimension. A content creator and journalist whose digital presence is suppressed through coordinated platform reporting cannot exercise First Amendment rights in any practical sense, regardless of the formal absence of government censorship. A person systematically excluded from businesses and public spaces - denied access to power sources, internet connectivity, and basic rest - has their Fourth and Fourteenth Amendment protections eroded in real time, not through a single act but through the cumulative weight of distributed, deniable, coordinated pressure. The chilling effect is not theoretical here. It is documented and ongoing. Where state response is repeatedly activated through private manipulation, the color of law line implicates potential civil rights claims under 42 U.S.C. § 1983."
+        ]
+      },
+      {
+        id: 'subject-response',
+        title: "The Subject's Response",
+        content: [
+          "What distinguishes this case analytically is that the subject did not collapse under these conditions. He adapted. He developed what he calls the Breadcrumb Web - a deliberate, high-signal documentation methodology that logged key events with forensic discipline rather than exhaustive volume. He cultivated atmospheric intelligence - the ability to read environmental pre-threat signals before they manifested as direct action. He transformed his own hypervigilance, which the campaign sought to weaponize against him as evidence of instability, into a tactical early warning system.",
+          "The spoken word and written documentation he produced throughout this period is not incidental content. It constitutes a primary evidentiary record: proof that a man under sustained, coordinated psychological assault maintained the precision, coherence, and analytical clarity that his adversaries were attempting to discredit. You cannot be simultaneously as analytically sophisticated as this record demonstrates and as cognitively compromised as the campaign narrative required. The documentation is its own refutation."
+        ]
+      },
+      {
+        id: 'case-significance',
+        title: "What This Case Means",
+        content: [
+          "Ryan Borland's experience is not unique in its mechanics. It is unusual in the quality of its documentation. Coordinated civilian harassment campaigns of this architecture - using community contamination, institutional co-optation, digital suppression, and psychological entrapment in sequence - are the modern equivalent of what COINTELPRO-era documents described as \"neutralization.\" The difference is that today's versions operate through informal, deniable networks rather than government agencies, which makes them harder to prosecute and easier to dismiss.",
+          "This case provides a documented template for identifying these operations, understanding their psychological effects, and establishing the evidentiary foundation necessary for accountability."
+        ]
+      }
+    ],
+    references: [
+      "Borland, R. (2026). The Psychological Architecture of Prolonged Coordinated Harassment. [buildwhilebleeding.com](https://buildwhilebleeding.com)",
+      "Herman, J. L. (1992). [Trauma and recovery](https://en.wikipedia.org/wiki/Trauma_and_Recovery).",
+      "[42 U.S.C. § 1983](https://www.law.cornell.edu/uscode/text/42/1983).",
+      "Seligman, M. E. P. (1975). [Helplessness](https://en.wikipedia.org/wiki/Learned_helplessness)."
     ]
   }
 ];

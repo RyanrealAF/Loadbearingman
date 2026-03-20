@@ -1,16 +1,39 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Copy, Check } from 'lucide-react';
 import { PAPERS, AcademicPaperData } from '../data/papers';
+import { formatText } from '../utils/textFormatting';
 
 interface AcademicPaperProps {
   onBack: () => void;
   selectedPaperId: string | null;
   onSelectPaper: (id: string | null) => void;
+  onDeepDive?: (dive: any) => void;
+  deepDives?: any[];
 }
 
-const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, onSelectPaper }) => {
+const AcademicPaper: React.FC<AcademicPaperProps> = ({ 
+  onBack, 
+  selectedPaperId, 
+  onSelectPaper,
+  onDeepDive,
+  deepDives
+}) => {
+  const [copied, setCopied] = useState(false);
   const selectedPaper = PAPERS.find(p => p.id === selectedPaperId);
+
+  const handleCopyCitation = (paper: AcademicPaperData) => {
+    const citation = `${paper.author} (${paper.year}). ${paper.title}. Street-Level Studies, Vol. I. Retrieved from ${paper.domain}`;
+    navigator.clipboard.writeText(citation);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const calculateReadingTime = (paper: AcademicPaperData) => {
+    const wordCount = paper.sections.reduce((acc, section) => 
+      acc + section.content.reduce((sAcc, para) => sAcc + para.split(' ').length, 0), 0);
+    return Math.ceil(wordCount / 200);
+  };
 
   const renderLibrary = () => (
     <div className="max-w-[900px] mx-auto px-6 py-20 relative">
@@ -91,23 +114,30 @@ const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, 
         <div className="mt-7 flex flex-wrap gap-8 font-['Space_Mono',_monospace] text-[0.6rem] tracking-[0.1em] text-[#6b6560] uppercase">
           <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Author</strong> {paper.author}</span>
           <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Domain</strong> {paper.domain}</span>
-          <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Contact</strong> {paper.contact}</span>
           <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Year</strong> {paper.year}</span>
+          <span className="flex flex-col gap-1"><strong className="text-[#0e0c0a] text-[0.65rem]">Reading Time</strong> {calculateReadingTime(paper)} min</span>
+          <button 
+            onClick={() => handleCopyCitation(paper)}
+            className="flex items-center gap-2 text-[#8b2e0f] hover:opacity-70 transition-opacity"
+          >
+            {copied ? <Check size={12} /> : <Copy size={12} />}
+            <span>{copied ? 'Citation Copied' : 'Copy Citation'}</span>
+          </button>
         </div>
       </div>
 
       {/* ---- ABSTRACT ---- */}
       <div className="border border-[#c9bfb3] border-l-[3px] border-l-[#b89a4e] bg-[#b89a4e]/[0.04] px-7 py-6 mb-13">
         <div className="font-['Space_Mono',_monospace] text-[0.58rem] tracking-[0.2em] uppercase text-[#b89a4e] mb-3">Abstract</div>
-        <p className="text-[0.95rem] leading-[1.75] text-[#6b6560] italic mb-6">
-          {paper.abstract}
-        </p>
+        <div className="text-[0.95rem] leading-[1.75] text-[#6b6560] italic mb-6">
+          {formatText(paper.abstract, onSelectPaper, onDeepDive, deepDives)}
+        </div>
         {paper.authorNote && (
           <div className="pt-6 border-t border-[#c9bfb3]/50">
             <div className="font-['Space_Mono',_monospace] text-[0.58rem] tracking-[0.2em] uppercase text-[#b89a4e] mb-3">Author Note</div>
-            <p className="text-[0.85rem] leading-[1.6] text-[#6b6560] italic">
-              {paper.authorNote}
-            </p>
+            <div className="text-[0.85rem] leading-[1.6] text-[#6b6560] italic">
+              {formatText(paper.authorNote, onSelectPaper, onDeepDive, deepDives)}
+            </div>
           </div>
         )}
       </div>
@@ -121,7 +151,7 @@ const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, 
           </div>
           <div className="text-[1.05rem] leading-[1.82] text-[#0e0c0a] text-justify hyphens-auto space-y-4.5">
             {section.content.map((para, pIdx) => (
-              <p key={pIdx}>{para}</p>
+              <div key={pIdx}>{formatText(para, onSelectPaper, onDeepDive, deepDives)}</div>
             ))}
           </div>
           {idx < paper.sections.length - 1 && (
@@ -139,13 +169,15 @@ const AcademicPaper: React.FC<AcademicPaperProps> = ({ onBack, selectedPaperId, 
         <div className="font-['Space_Mono',_monospace] text-[0.6rem] tracking-[0.2em] uppercase text-[#b89a4e] mb-6">References</div>
         <div className="space-y-3 font-['EB_Garamond',_serif] text-[0.9rem] text-[#6b6560]">
           {paper.references.map((ref, rIdx) => (
-            <p key={rIdx} className="pl-4 -indent-4">{ref}</p>
+            <div key={rIdx} className="pl-4 -indent-4">
+              {formatText(ref, onSelectPaper, onDeepDive, deepDives)}
+            </div>
           ))}
         </div>
       </div>
 
       <footer className="border-t border-[#c9bfb3] pt-5 mt-20 flex justify-between font-['Space_Mono',_monospace] text-[0.55rem] tracking-[0.1em] text-[#6b6560] uppercase">
-        <span>&copy; {paper.year} {paper.author} &mdash; <a href={`https://${paper.domain}`} className="text-[#8b2e0f] no-underline">{paper.domain}</a></span>
+        <span>&copy; {paper.year} {paper.author} &mdash; <button onClick={() => onSelectPaper(null)} className="text-[#8b2e0f] no-underline hover:opacity-70 transition-opacity cursor-pointer">{paper.domain}</button></span>
         <span>Street-Level Studies &nbsp;·&nbsp; Vol. I</span>
         <span><a href={`mailto:${paper.contact}`} className="text-[#8b2e0f] no-underline">{paper.contact}</a></span>
       </footer>
